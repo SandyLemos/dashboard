@@ -9,6 +9,7 @@ import {
 } from "./ui/select"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
+import { translateCategory, CategoryKey } from "./ui/categoryUtils"
 
 export interface EventFilters {
   search: string
@@ -19,6 +20,13 @@ export interface EventFilters {
     | "sports"
     | "education"
     | "entertainment"
+    | "musicalShows"
+    | "courses"
+    | "teather"
+    | "technology"
+    | "gastronomy"
+    | "religious"
+    | "kidsAndFamily"
     | "other"
   status: "all" | "active" | "inactive"
   dateRange: "all" | "today" | "this-week" | "this-month" | "next-month"
@@ -84,7 +92,9 @@ export function EventFiltersComponent({
               <SelectItem value="teather">Teatro e Cultura</SelectItem>
               <SelectItem value="technology">Tecnologia e Inovação</SelectItem>
               <SelectItem value="gastronomy">Gastronomia e Bebidas</SelectItem>
-              <SelectItem value="religious">Religião e Espiritualidade</SelectItem>
+              <SelectItem value="religious">
+                Religião e Espiritualidade
+              </SelectItem>
               <SelectItem value="kidsAndFamily">Infantil e Família</SelectItem>
               <SelectItem value="other">Outros</SelectItem>
             </SelectContent>
@@ -149,7 +159,7 @@ export function EventFiltersComponent({
 
           {filters.category !== "all" && (
             <Badge variant="secondary" className="gap-1">
-              Category: {filters.category}
+              Category: {translateCategory(filters.category as CategoryKey)}
               <X
                 className="h-3 w-3 cursor-pointer"
                 onClick={() => updateFilter("category", "all")}

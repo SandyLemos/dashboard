@@ -4,48 +4,13 @@ import { Card, CardContent, CardFooter, CardHeader } from "./ui/card"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
 import { getNextEventDate } from "../utils/eventUtils"
+import { translateCategory, CategoryKey } from "./ui/categoryUtils"
 
 interface EventCardProps {
-  event: Event
+  event: Event & { category: CategoryKey }
   onEdit: (event: Event) => void
   onDelete: (eventId: string) => void
   onView: (event: Event) => void
-}
-
-const translateCategory = (category: Event["category"]): string => {
-  switch (category) {
-    case "business":
-      return "Negócios"
-    case "social":
-      return "Social"
-    case "sports":
-      return "Esportes e Bem-estar" // Novo nome completo
-    case "education":
-      return "Educação"
-    case "entertainment":
-      return "Entretenimento"
-    
-    // NOVAS CATEGORIAS
-    case "musicalShows":
-      return "Shows e Festas"
-    case "courses":
-      return "Cursos e Workshops"
-    case "teather":
-      return "Teatro e Cultura"
-    case "technology":
-      return "Tecnologia e Inovação"
-    case "gastronomy":
-      return "Gastronomia e Bebidas"
-    case "religious":
-      return "Religião e Espiritualidade"
-    case "kidsAndFamily":
-      return "Infantil e Família"
-      
-    case "other":
-      return "Outro"
-    default:
-      return "Outro"
-  }
 }
 
 const categoryColors = {
@@ -101,7 +66,7 @@ export function EventCard({ event, onEdit, onDelete, onView }: EventCardProps) {
         <div className="flex justify-between items-start">
           <div className="flex gap-2 flex-wrap">
             {/* 2. APLICAÇÃO DA TRADUÇÃO AQUI */}
-            <Badge className={categoryColors[event.category]}>
+            <Badge className={categoryColors[event.category as CategoryKey]}>
               {translateCategory(event.category)}
             </Badge>
             {/* Tipagem corrigida: Usando as cores e o nome do status */}

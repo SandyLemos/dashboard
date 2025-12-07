@@ -3,7 +3,9 @@ import { Calendar, MapPin, Clock, Eye, Users } from "lucide-react"
 import { Event } from "../../types/event"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Button } from "../ui/button"
+import { Badge } from "../ui/badge"
 import { getNextEventDate } from "../../utils/eventUtils"
+import { translateCategory, CategoryKey, categoryColors } from "../ui/categoryUtils"
 
 interface NextEventCardProps {
   events: Event[]
@@ -93,6 +95,14 @@ export function NextEventCard({
 
         {/* Detalhes de evento */}
         <div>
+          <div className="mb-2">
+            <Badge
+              className={categoryColors[nextEvent.category as CategoryKey]}
+            >
+              {translateCategory(nextEvent.category as CategoryKey)}
+            </Badge>
+          </div>
+
           <h3 className="mb-1">{nextEvent.title}</h3>
           {/* USANDO MAPPIN AQUI */}
           <div className="flex items-center gap-1 text-sm text-muted-foreground line-clamp-2">

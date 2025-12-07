@@ -12,6 +12,7 @@ import { Event } from "../types/event"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
+import { translateCategory, CategoryKey } from "./ui/categoryUtils"
 
 interface EventDetailsProps {
   event: Event
@@ -22,11 +23,18 @@ interface EventDetailsProps {
 
 const categoryColors = {
   business: "bg-blue-100 text-blue-800",
-  social: "bg-green-100 text-green-800",
+  social: "bg-yellow-100 text-yellow-800",
   sports: "bg-orange-100 text-orange-800",
   education: "bg-purple-100 text-purple-800",
   entertainment: "bg-pink-100 text-pink-800",
-  other: "bg-gray-100 text-gray-800",
+  musicalShows: "bg-purple-900/10 text-purple-900",
+  courses: "bg-orange-100 text-orange-800",
+  teather: "bg-rose-100 text-pink-400",
+  technology: "bg-blue-900/10 text-blue-600",
+  gastronomy: "bg-lime-100 text-lime-800",
+  religious: "bg-amber-100 text-amber-800",
+  kidsAndFamily: "bg-fuchsia-800/10 text-fuchsia-800",
+  other: "bg-cyan-100 text-cyan-800",
 }
 
 const statusColors = {
@@ -72,9 +80,9 @@ export function EventDetails({
         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-4">
           <div className="flex-1">
             <div className="flex gap-2 mb-3">
-              <Badge className={categoryColors[event.category]}>
+              <Badge className={categoryColors[event.category as CategoryKey]}>
                 <Tag className="h-3 w-3 mr-1" />
-                {event.category}
+                {translateCategory(event.category as CategoryKey)}
               </Badge>
               <Badge
                 className={
@@ -192,8 +200,6 @@ export function EventDetails({
               variant="destructive"
               onClick={() => onDelete(event.id)}
               className="flex-1"
-              // APLIQUE O ESTILO INLINE PARA TESTE
-              // style={{ backgroundColor: "red" }}
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Excluir Evento

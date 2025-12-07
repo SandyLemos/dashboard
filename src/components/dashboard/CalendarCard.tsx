@@ -8,6 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Button } from "../ui/button"
 import { useState } from "react"
 import { Badge } from "../ui/badge"
+import {
+  translateCategory,
+  CategoryKey,
+  categoryColors,
+} from "../ui/categoryUtils"
 
 interface CalendarCardProps {
   events: Event[]
@@ -178,12 +183,11 @@ export function CalendarCard({ events, onViewEvent }: CalendarCardProps) {
                         {event.title}
                       </p>
                       <Badge
-                        variant="secondary"
-                        className="px-1.5 py-0 text-xs h-5 whitespace-nowrap"
+                        className={`px-1.5 py-0 text-xs h-5 whitespace-nowrap ${
+                          categoryColors[event.category as CategoryKey]
+                        }`}
                       >
-                        {" "}
-                        {/* NOVO BADGE */}
-                        {event.category}
+                      {translateCategory(event.category as CategoryKey)}
                       </Badge>
                     </div>
                     <p className="text-xs text-muted-foreground">

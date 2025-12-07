@@ -14,6 +14,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Switch } from "./ui/switch"
 import { Plus, Trash2, Calendar } from "lucide-react" 
+import { translateCategory, CategoryKey } from "./ui/categoryUtils"
 
 // TIPAGEM
 type ErrorMap = Record<string, string | undefined>
@@ -44,7 +45,7 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
       state: "",
       zipCode: "",
     },
-    category: event?.category || "other",
+    category: event?.category as CategoryKey|| "other",
     attendeeLimit: event?.attendeeLimit || undefined,
     ticketPrice: event?.ticketPrice || undefined,
     acceptingRegistrations: event?.acceptingRegistrations ?? true,
@@ -218,11 +219,12 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
               <Label htmlFor="category">Categoria</Label>
               <Select
                 value={formData.category}
-                onValueChange={(value: Event["category"]) =>
+                onValueChange={(value: CategoryKey) =>
                   updateField("category", value)
                 }
               >
                 <SelectTrigger>
+                  <SelectValue placeholder={translateCategory(formData.category)}/>
                   <SelectValue placeholder="Selecione a categoria" />
                 </SelectTrigger>
                 <SelectContent>
@@ -232,7 +234,7 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
                   <SelectItem value="education">Educação</SelectItem>
                   <SelectItem value="entertainment">Entretenimento</SelectItem>
                   <SelectItem value="musicalShows">Shows e Festas</SelectItem>
-                  <SelectItem value="courses">Cursos e Workshops</SelectItem>
+                  <SelectItem value="courses">Cursos/Workshops</SelectItem>
                   <SelectItem value="teather">Teatro e Cultura</SelectItem>
                   <SelectItem value="technology">Tecnologia e Inovação</SelectItem>
                   <SelectItem value="gastronomy">Gastronomia e Bebidas</SelectItem>
