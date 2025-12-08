@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evem - Cadastro</title>
+    <link rel="stylesheet" href="./src/signup.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="signup-card" id="card-selection">
+        <h2>Cadastro</h2>
+        <p class="subtitle">Selecione o tipo de usuário</p>
+
+        <div class="type-buttons">
+            <button onclick="showForm('participant')" class="btn-type">Participante</button>
+            <button onclick="showForm('organizer')" class="btn-type">Organizador</button>
+        </div>
+
+        <div class="footer-link">
+            Já tem uma conta? <a href="login.html">Login</a>
+        </div>
+        <a href="index.html" class="back-link">← Voltar para o site</a>
+    </div>
+
+    <div class="signup-card hidden" id="card-participant">
+        <h2>Cadastro</h2>
+        <div class="badge">Participante</div>
+        <form>
+            <div class="input-wrapper">
+                <label>Nome</label>
+                <input type="text">
+            </div>
+            <div class="input-wrapper">
+                <label>Email</label>
+                <input type="email">
+            </div>
+            <div class="input-wrapper">
+                <label>Senha</label>
+                <input type="password">
+            </div>
+            <div class="input-wrapper">
+                <label>Repita a senha</label>
+                <input type="password">
+            </div>
+            <button class="btn-submit">Cadastro</button>
+            <button type="button" onclick="showForm('selection')" class="btn-back">Voltar</button>
+        </form>
+    </div>
+
+    <div class="signup-card hidden" id="card-organizer">
+        <h2>Cadastro</h2>
+        <div class="badge">Organizador</div>
+        <form>
+            <div class="input-wrapper">
+                <label>Nome da empresa</label>
+                <input type="text">
+            </div>
+            <div class="input-wrapper">
+                <label>CNPJ ou CPF</label>
+                <input type="text">
+            </div>
+            
+            <div class="input-wrapper">
+                <label>Telefone comercial</label>
+                <input type="text">
+            </div>
+
+            <div class="input-wrapper">
+                <label>Email corporativo</label>
+                <input type="email">
+            </div>
+            
+            <div class="divider"><span>Endereço</span></div>
+            
+            <div class="input-wrapper">
+                <label>Nome da cidade</label>
+                <input type="text">
+            </div>
+            <div class="input-wrapper">
+                <label>CEP</label>
+                <input type="text">
+            </div>
+
+            <div class="input-wrapper">
+                <label>Rua</label>
+                <input type="text">
+            </div>
+            <div class="input-wrapper">
+                <label>Bairro</label>
+                <input type="text">
+            </div>
+            
+            <button class="btn-submit">Cadastro</button>
+            <button type="button" onclick="showForm('selection')" class="btn-back">Voltar</button>
+        </form>
+    </div>
+
+    <script>
+        function showForm(type) {
+            document.getElementById('card-selection').classList.add('hidden');
+            document.getElementById('card-participant').classList.add('hidden');
+            document.getElementById('card-organizer').classList.add('hidden');
+
+            if (type === 'selection') document.getElementById('card-selection').classList.remove('hidden');
+            else if (type === 'participant') document.getElementById('card-participant').classList.remove('hidden');
+            else if (type === 'organizer') document.getElementById('card-organizer').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

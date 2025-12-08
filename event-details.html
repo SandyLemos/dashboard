@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Evento - Evem</title>
+    
+    <link rel="stylesheet" href="./src/event-details.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="main-navbar">
+        <a href="events.html" class="back-link">
+            <i class="fa-solid fa-chevron-left"></i> Voltar
+        </a>
+
+        <div class="nav-logo">
+            <img src="/img/logo-header.png" alt="Evem">
+        </div>
+
+        <div class="nav-profile" style="position: relative;">
+            <button class="profile-btn" onclick="toggleProfileMenu()">
+                <i class="fa-solid fa-bars menu-icon"></i>
+                <div class="avatar-circle"><i class="fa-solid fa-user"></i></div>
+            </button>
+            
+            <div class="profile-dropdown" id="profileMenu">
+                <div class="dropdown-header">
+                    <div class="avatar-circle" style="background-color: #0085D7;"><i class="fa-solid fa-user"></i></div>
+                    <div class="user-info"><strong>FULANO DE TAL</strong><span>fulano@gmail.com</span></div>
+                </div>
+                <ul class="dropdown-links">
+                    <li><a href="account.html"><i class="fa-regular fa-id-card"></i> Minha conta</a></li>
+                    <li><a href="ingressos.html"><i class="fa-solid fa-ticket-simple"></i> Meus Ingressos</a></li>
+                    <li><a href="favoritos.html"><i class="fa-solid fa-heart"></i> Favoritos</a></li>
+                </ul>
+                <div class="dropdown-footer">
+                    <a href="index.html" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="event-hero">
+        <div class="hero-content">
+            <div class="hero-info">
+                <h1>RAPHAEL GHANEM - SE É QUE VOCÊ ME ENTENDE!</h1>
+                
+                <ul class="info-list">
+                    <li><i class="fa-regular fa-calendar"></i> 27 a 29 de Novembro</li>
+                    <li><i class="fa-regular fa-clock"></i> Quinta e Sexta às 22h00, Sábado às 21h00</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Befly Minascentro - Belo Horizonte - MG</li>
+                    <li><i class="fa-solid fa-user"></i> <a href="#" style="color: #eebb58;">Ver Organizador</a></li>
+                </ul>
+
+                <span class="hero-tag">Stand Up Comedy</span>
+            </div>
+
+            <div class="hero-image">
+                <img src="/img/poster-raphael.jpg" alt="Raphael Ghanem">
+            </div>
+        </div>
+    </header>
+
+    <main class="content-container">
+        <div class="content-grid">
+            
+            <div class="left-column">
+                <section>
+                    <h2 class="section-title">Descrição do evento</h2>
+                    <div class="text-block">
+                        <p><strong>RAPHAEL GHANEM - SE É QUE VOCÊ ME ENTENDE!</strong></p>
+                        <p>Com texto, interpretação e direção de Raphael Ghanem, "Se é que você me entende" é um espetáculo de Stand up Comedy, repleto de interações e improvisações, feito com texto 100% autoral e sem auxílio de figurinos, perucas e adereços.</p>
+                        <p>O show que tem a duração de 1h20 min, conta com as histórias de vida do artista, além de suas análises de relacionamento, causos rotineiros, e uma perspectiva um tanto quanto exagerada do cotidiano.</p>
+                        <p class="highlight-text">⚠ Show com gravação: ao adentrar a sala de apresentação, você cede seus direitos de imagem ao artista.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="section-title">Cronograma / Sessões disponíveis</h2>
+                    <ul class="schedule-list">
+                        <li>
+                            <div class="date-box">27<br>NOV</div>
+                            <div class="session-info">
+                                <strong>Quinta-feira</strong>
+                                <span>22:00 (Abertura: 21:00)</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="date-box">28<br>NOV</div>
+                            <div class="session-info">
+                                <strong>Sexta-feira</strong>
+                                <span>22:00 (Abertura: 21:00)</span>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="section-title">Sobre o produtor</h2>
+                    <p><strong>GDG e WTM Lauro de Freitas</strong></p>
+                    <p>Google Developer Group Lauro de Freitas e Google Women Techmakers.</p>
+                </section>
+
+                <section>
+                    <h2 class="section-title">Política do evento</h2>
+                    <p>Ao adquirir ingressos, você concorda com nossa <strong>[Política de Privacidade]</strong> e <strong>[Termos de Uso]</strong>.</p>
+                    <p>Seus dados serão tratados de acordo com a LGPD.</p>
+                </section>
+            </div>
+
+            <aside class="right-column">
+                <div class="ticket-card sticky">
+                    <div class="ticket-header">
+                        <div class="icon-box"><i class="fa-solid fa-ticket"></i></div>
+                        <div class="price-info">
+                            <span>Valor do Ingresso</span>
+                            <strong>R$ 80,00</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-badge">Aceitamos PIX</div>
+                    
+                    <button class="buy-button">Comprar Ingressos</button>
+                    
+                    <div class="secure-note">
+                        <i class="fa-solid fa-lock"></i> Compra 100% Segura
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+    <div class="footer-wrapper">
+        <div class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+            <i class="fa-solid fa-arrow-up"></i> De volta ao topo
+        </div>
+        <footer class="main-footer">
+            <div class="footer-columns">
+                <div class="footer-col">
+                    <h3>Sobre nós</h3>
+                    <p>A EVEM conecta pessoas a experiências únicas.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Navegue</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="events.html">Lista de Eventos</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">© 2025 EVEM – Todos os direitos reservados.</div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleProfileMenu() {
+            document.getElementById('profileMenu').classList.toggle('show');
+        }
+        window.addEventListener('click', function(e) {
+            const menu = document.getElementById('profileMenu');
+            const btn = document.querySelector('.profile-btn');
+            if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

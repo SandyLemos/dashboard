@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Eventos</title>
+    <link rel="stylesheet" href="./src/events.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <body>
+
+    <nav class="main-navbar">
+        <div class="nav-placeholder"></div>
+
+        <div class="nav-logo">
+            <img src="/img/logo-header.png" alt="Evem">
+        </div>
+
+        <div class="nav-profile" style="position: relative;">
+            <button class="profile-btn" onclick="toggleProfileMenu()">
+                <i class="fa-solid fa-bars menu-icon"></i>
+                <div class="avatar-circle">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </button>
+
+            <div class="profile-dropdown" id="profileMenu">
+                <div class="dropdown-header">
+                    <div class="avatar-large">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <strong>FULANO DE TAL</strong>
+                        <span>fulanodetal@gmail.com</span>
+                    </div>
+                </div>
+
+                <ul class="dropdown-links">
+                    <li><a href="account.html"><i class="fa-regular fa-id-card"></i> Minha conta</a></li>
+                    <li><a href="ingressos.html"><i class="fa-solid fa-ticket-simple"></i> Meus Ingressos</a></li>
+                    <li><a href="favoritos.html"><i class="fa-solid fa-heart"></i> Favoritos</a></li>
+                </ul>
+
+                <div class="dropdown-footer">
+                    <a href="index.html" class="logout-link">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="featured-carousel-area">
+        <h2 style="padding: 0 60px; margin-bottom: 20px; color: #4B0082;">Destaques da Semana</h2>
+        
+        <div class="carousel-container">
+            <div class="carousel-track" id="track">
+                <div class="event-card">
+                    <img src="/img/poster-raphael.jpg" alt="Evento">
+                    <div class="event-overlay">
+                        <div class="ticket-badge"><i class="fa-solid fa-ticket"></i> <strong>15</strong> rest.</div>
+                        <h3>Raphael Ghanem</h3>
+                        <p>Salvador - BA</p>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <img src="/img/poster-raphael.jpg" alt="Evento">
+                    <div class="event-overlay">
+                        <div class="ticket-badge"><i class="fa-solid fa-ticket"></i> <strong>40</strong> rest.</div>
+                        <h3>Show Extra</h3>
+                        <p>Salvador - BA</p>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <img src="/img/poster-raphael.jpg" alt="Evento">
+                    <div class="event-overlay">
+                        <div class="ticket-badge"><i class="fa-solid fa-ticket"></i> <strong>Esgotado</strong></div>
+                        <h3>Final Tour</h3>
+                        <p>Salvador - BA</p>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <img src="/img/poster-raphael.jpg" alt="Evento">
+                    <div class="event-overlay">
+                        <h3>Encerramento</h3>
+                        <p>Salvador - BA</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-controls">
+                <button class="nav-arrow" id="prev"><i class="fa-solid fa-circle-chevron-left"></i></button>
+    
+                <div id="dots-container" style="display: flex; gap: 10px; align-items: center;"></div>
+
+                <button class="nav-arrow" id="next"><i class="fa-solid fa-circle-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+    
+    <header class="events-header">
+        <div class="top-filters">
+            <div class="left-group">
+                <button class="btn-blue">Ativo</button>
+                <div class="location-btn">
+                    <i class="fa-solid fa-location-dot"></i> Catu <i class="fa-solid fa-chevron-down"></i>
+                </div>
+            </div>
+
+            <div class="search-wrapper">
+                <input type="text" placeholder="Busque evento, local, etc">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+
+            <div class="right-group">
+                <button class="btn-filter">Todas as categorias <i class="fa-solid fa-chevron-down"></i></button>
+                <button class="btn-filter">Este Mês <i class="fa-solid fa-chevron-down"></i></button>
+            </div>
+        </div>
+
+        <div class="tags-row">
+            <button class="tag-btn">Eventos Corporativos</button>
+            <button class="tag-btn">Stand up comedy</button>
+            <button class="tag-btn">Festas e Shows</button>
+        </div>
+    </header>
+
+    <main class="events-container">
+        
+       <div class="event-row-card">
+            <div class="card-image">
+                <img src="/img/breakfast.jpg" alt="Café da manhã">
+            </div>
+            
+            <div class="card-info">
+                <span class="category-badge purple">Gastronomia e bebidas</span>
+                <h3>Festival de delícias culinárias</h3>
+                <p class="description">Lorem ipsum dolor sit amet consectetur adipiscing elit. Dolor sit amet consectetur adipiscing elit quisque faucibus.</p>
+            </div>
+
+            <div class="card-meta">
+                <div class="meta-item">
+                    <i class="fa-solid fa-location-dot"></i> <span>The Plaza, San Francisco, CA</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fa-regular fa-calendar"></i> <span>Quarta, 15 a 23 de Outubro, 2025 - 13:00</span>
+                </div>
+                
+                <div class="price-action">
+                    <div class="price-tag">
+                        <i class="fa-solid fa-ticket"></i>
+                        <div class="price-text">
+                            <strong>115</strong>
+                            <span>Ingressos restantes</span>
+                        </div>
+                    </div>
+                    <i class="fa-regular fa-heart heart-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="event-row-card active-border">
+            <div class="card-image">
+                <img src="/img/breakfast.jpg" alt="Workshop de Culinária">
+            </div>
+            
+            <div class="card-info">
+                <span class="category-badge purple">Gastronomia e bebidas</span>
+                <h3>Workshop de Culinária</h3>
+                <p class="description">Aprenda com os melhores chefs da região as técnicas para um café da manhã perfeito.</p>
+            </div>
+
+            <div class="card-meta">
+                <div class="meta-item">
+                    <i class="fa-solid fa-location-dot"></i> <span>Centro Gastronômico</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fa-regular fa-calendar"></i> <span>Sábado, 20 de Outubro, 2025 - 10:00</span>
+                </div>
+                
+                <div class="price-action">
+                    <div class="price-tag">
+                        <i class="fa-solid fa-ticket"></i>
+                        <div class="price-text">
+                            <strong>40</strong>
+                            <span>Ingressos restantes</span>
+                        </div>
+                    </div>
+                    <i class="fa-regular fa-heart heart-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="event-row-card">
+            <div class="card-image">
+                <a href="event-details.html" class="img-link">
+                    <img src="/img/poster-raphael.jpg" alt="Raphael Ghanem">
+                </a>
+            </div>
+            <div class="card-info">
+                <span class="category-badge orange">Stand up comedy</span>
+                <h3>Raphael Ghanem - Se é que você me entende!</h3>
+                <p class="description">Espetáculo de Stand up Comedy imperdível.</p>
+            </div>
+            <div class="card-meta">
+                <div class="meta-item"><i class="fa-solid fa-location-dot"></i> BeFly Minascentro</div>
+                <div class="meta-item"><i class="fa-regular fa-calendar"></i> Sexta às 22h00</div>
+                <div class="price-action">
+    <div class="price-tag">
+        <i class="fa-solid fa-ticket" style="color: #a229ad;"></i>
+        
+        <strong>15</strong> <span>restantes</span>
+    </div>
+    <i class="fa-solid fa-heart heart-icon filled"></i>
+</div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="footer-wrapper">
+        
+        <div class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+            <i class="fa-solid fa-arrow-up"></i> De volta ao topo
+        </div>
+
+        <footer class="main-footer">
+            <div class="footer-columns">
+                
+                <div class="footer-col">
+                    <h3>Sobre nós</h3>
+                    <p>A EVEM é uma plataforma de gerenciamento de eventos que conecta pessoas a experiências únicas.</p>
+                    <p>Nossa missão é simplificar a organização e a participação em eventos de todos os tipos.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Contato e Redes</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Navegue</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="signup.html">Cadastro</a></li>
+                        <li><a href="events.html">Lista de Eventos</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="copyright">
+                © 2025 EVEM – Todos os direitos reservados.
+            </div>
+        </footer>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // --- 1. LÓGICA DO BOTÃO FAVORITO (CORAÇÃO) ---
+        const hearts = document.querySelectorAll('.heart-icon');
+        
+        hearts.forEach(heart => {
+            heart.addEventListener('click', function() {
+                // Alterna a classe que dá a cor
+                this.classList.toggle('filled');
+
+                // Troca o desenho (de borda para preenchido)
+                if (this.classList.contains('filled')) {
+                    this.classList.remove('fa-regular');
+                    this.classList.add('fa-solid');
+                } else {
+                    this.classList.remove('fa-solid');
+                    this.classList.add('fa-regular');
+                }
+            });
+        });
+
+        // --- 2. LÓGICA DO MENU DE PERFIL ---
+        window.toggleProfileMenu = function() {
+            const menu = document.getElementById('profileMenu');
+            if (menu) menu.classList.toggle('show');
+        }
+
+        window.addEventListener('click', function(e) {
+            const menu = document.getElementById('profileMenu');
+            const btn = document.querySelector('.profile-btn');
+            if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.remove('show');
+            }
+        });
+
+        // --- 3. LÓGICA DO CARROSSEL (Se houver carrossel na página) ---
+        const track = document.getElementById('track');
+        const nextBtn = document.getElementById('next');
+        const prevBtn = document.getElementById('prev');
+        const dotsContainer = document.getElementById('dots-container');
+        const cards = document.querySelectorAll('.carousel-track .event-card');
+
+        if (track && cards.length > 0) {
+            let currentIndex = 0;
+            const cardWidth = 320; 
+            const totalItems = cards.length;
+
+            function createDots() {
+                if (!dotsContainer) return;
+                dotsContainer.innerHTML = '';
+                cards.forEach((_, index) => {
+                    const dot = document.createElement('div');
+                    dot.classList.add('dot');
+                    if (index === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => {
+                        currentIndex = index;
+                        updateCarousel();
+                    });
+                    dotsContainer.appendChild(dot);
+                });
+            }
+
+            function updateCarousel() {
+                const position = -(currentIndex * cardWidth);
+                track.style.transform = `translateX(${position}px)`;
+                
+                const dots = document.querySelectorAll('.dot');
+                dots.forEach(d => d.classList.remove('active'));
+                if (dots[currentIndex]) dots[currentIndex].classList.add('active');
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    if (currentIndex < totalItems - 1) {
+                        currentIndex++;
+                        updateCarousel();
+                    }
+                });
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        updateCarousel();
+                    }
+                });
+            }
+            createDots();
+        }
+    });
+</script>
+</body>
+</html>
+</body>
+</html>
+</body>
+</html>
