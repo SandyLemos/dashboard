@@ -1,0 +1,109 @@
+/* src/login.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: #1a0b2e;
+    background-image: linear-gradient(rgba(20, 0, 40, 0.8), rgba(20, 0, 40, 0.8)), url('/img/fundo-hero.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 380px;
+    padding: 40px 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(30, 10, 50, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    text-align: center;
+    color: white;
+}
+
+.login-card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* Inputs */
+.input-group { text-align: left; margin-bottom: 20px; }
+.input-group label { display: block; color: #fff; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
+
+.input-wrapper input {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    background-color: #ffffff;
+    color: #333;
+    font-size: 0.9rem;
+    outline: none;
+}
+.input-wrapper input:focus { box-shadow: 0 0 0 2px #d62f98; }
+
+
+.options {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+    color: #ccc;
+}
+
+.options label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+.options input[type="checkbox"] { accent-color: #d62f98; } /* Checkbox rosa */
+
+.forgot-pass { color: #eebb58; text-decoration: none; }
+.forgot-pass:hover { text-decoration: underline; }
+
+/* Botão */
+.btn-login {
+    width: 100%;
+    height: 40px;
+    background-color: #d62f98;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-login:hover { background-color: #b0247a; }
+
+/* === PARTE NOVA: Link de Cadastro e Voltar === */
+.register-link {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: #ccc;
+}
+.register-link a { color: #eebb58; font-weight: 600; text-decoration: none; }
+.register-link a:hover { text-decoration: underline; }
+
+.back-link {
+    display: block;
+    margin-top: 15px;
+    font-size: 0.8rem;
+    color: #888;
+    text-decoration: none;
+}
+.back-link:hover { color: white; }

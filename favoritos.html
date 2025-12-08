@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favoritos - Evem</title>
+    <link rel="stylesheet" href="./src/ingressos.css">
+    
+    <style>
+        /* Ajustes específicos para Favoritos */
+        .fav-title-icon { font-size: 2rem; color: #d63031; margin-right: 10px; transform: rotate(-10deg); }
+        
+        .fav-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .fav-card:hover { transform: translateY(-3px); }
+
+        .fav-img { width: 200px; height: 120px; border-radius: 12px; object-fit: cover; flex-shrink: 0; }
+        
+        .fav-info { flex-grow: 1; }
+        .fav-tag { 
+            display: inline-block; padding: 4px 12px; border-radius: 15px; 
+            font-size: 0.75rem; font-weight: 700; margin-bottom: 8px; 
+        }
+        .tag-orange { background: #ffeaa7; color: #d35400; }
+        .tag-purple { background: #e0d4fc; color: #6c5ce7; }
+
+        .fav-info h3 { font-size: 1.2rem; margin-bottom: 5px; color: #000; }
+        .fav-info p { font-size: 0.85rem; color: #666; line-height: 1.4; max-width: 600px; }
+
+        .fav-meta { 
+            min-width: 250px; border-left: 1px solid #eee; padding-left: 20px; 
+            display: flex; flex-direction: column; gap: 8px; justify-content: center;
+        }
+        .meta-row { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #555; }
+        .meta-row i { color: #8e44ad; width: 15px; text-align: center; }
+
+        .fav-actions { 
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px; 
+            min-width: 120px;
+        }
+        .ticket-status { 
+            background: #f1f2f6; padding: 5px 10px; border-radius: 8px; 
+            font-size: 0.75rem; font-weight: 700; color: #333; display: flex; align-items: center; gap: 5px;
+        }
+        .heart-btn { font-size: 1.5rem; color: #d63031; cursor: pointer; transition: 0.2s; }
+        .heart-btn:hover { transform: scale(1.1); }
+
+        @media (max-width: 900px) {
+            .fav-card { flex-direction: column; align-items: start; }
+            .fav-img { width: 100%; height: 180px; }
+            .fav-meta { border-left: none; padding-left: 0; border-top: 1px solid #eee; padding-top: 15px; width: 100%; }
+            .fav-actions { width: 100%; flex-direction: row; justify-content: space-between; align-items: center; margin-top: 10px; }
+        }
+    </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="account-header">
+        <div class="header-logo">
+            <img src="/img/logo-header.png" alt="Evem">
+        </div>
+        <div class="nav-profile" style="position: relative;">
+            <button class="profile-btn" onclick="toggleProfileMenu()">
+                <i class="fa-solid fa-bars menu-icon"></i>
+                <div class="avatar-circle"><i class="fa-solid fa-user"></i></div>
+            </button>
+            <div class="profile-dropdown" id="profileMenu">
+                <div class="dropdown-header">
+                    <div class="avatar-circle" style="background-color: #0085D7;"><i class="fa-solid fa-user"></i></div>
+                    <div class="user-info"><strong>FULANO DE TAL</strong><span>fulano@gmail.com</span></div>
+                </div>
+                <ul class="dropdown-links">
+                    <li><a href="account.html"><i class="fa-regular fa-id-card"></i> Minha conta</a></li>
+                    <li><a href="ingressos.html"><i class="fa-solid fa-ticket-simple"></i> Meus Ingressos</a></li>
+                    <li><a href="favoritos.html"><i class="fa-solid fa-heart"></i> Favoritos</a></li>
+                </ul>
+                <div class="dropdown-footer">
+                    <a href="index.html" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="tickets-container">
+        
+        <div class="page-title">
+            <i class="fa-solid fa-ticket-simple fav-title-icon" style="color: #d35400;"></i> <h1>Eventos Favoritos</h1>
+        </div>
+
+        <div class="tickets-list">
+
+            <div class="fav-card">
+                <img src="/img/poster-raphael.jpg" alt="Show" class="fav-img">
+                
+                <div class="fav-info">
+                    <span class="fav-tag tag-orange">Stand up comedy</span>
+                    <h3>Raphael Ghanem - Se é que você me entende!</h3>
+                    <p>Com texto, interpretação e direção de Raphael Ghanem, "Se é que você me entende" é um espetáculo de Stand up Comedy repleto de interações.</p>
+                </div>
+
+                <div class="fav-meta">
+                    <div class="meta-row"><i class="fa-solid fa-location-dot"></i> BeFly Minascentro</div>
+                    <div class="meta-row"><i class="fa-regular fa-calendar"></i> Quinta e Sexta às 22h00</div>
+                </div>
+
+                <div class="fav-actions">
+                    <div class="ticket-status">
+                        <i class="fa-solid fa-ticket"></i> 15 restantes
+                    </div>
+                    <i class="fa-solid fa-heart heart-btn"></i>
+                </div>
+            </div>
+
+            <div class="fav-card">
+                <img src="img/breakfast.jpg" alt="Festival" class="fav-img">
+                
+                <div class="fav-info">
+                    <span class="fav-tag tag-purple">Gastronomia e bebidas</span>
+                    <h3>Festival de delícias culinárias</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Dolor sit amet consectetur adipiscing elit quisque faucibus.</p>
+                </div>
+
+                <div class="fav-meta">
+                    <div class="meta-row"><i class="fa-solid fa-location-dot"></i> The Plaza, San Francisco</div>
+                    <div class="meta-row"><i class="fa-regular fa-calendar"></i> Quarta, 15 a 23 Out - 13:00</div>
+                </div>
+
+                <div class="fav-actions">
+                    <div class="ticket-status">
+                        <i class="fa-solid fa-ticket"></i> 115 restantes
+                    </div>
+                    <i class="fa-solid fa-heart heart-btn"></i>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        function toggleProfileMenu() {
+            document.getElementById('profileMenu').classList.toggle('show');
+        }
+        window.addEventListener('click', function(e) {
+            const menu = document.getElementById('profileMenu');
+            const btn = document.querySelector('.profile-btn');
+            if (!btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

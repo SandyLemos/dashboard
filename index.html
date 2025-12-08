@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evem - Event Management</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="/img/logo-header.png" alt="Evem Logo" style="height: 100px; width: auto;">
+        </div>
+
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass" style="color: #d62f98;"></i>
+            <input type="text" placeholder="Buscar eventos">
+        </div>
+
+        <nav>
+            <ul class="nav-links">
+                <li><a href="events.html">Eventos</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+            </ul>
+        </nav>
+    </header> 
+
+    <section class="hero">
+        <div class="decoration-circle circle-large"></div>
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
+
+        <div class="hero-content">
+            <img src="/img/logo-hero.png" alt="Evem Event Management" class="hero-logo-img">
+            
+            <div class="btn-group">
+                <a href="signup.html" class="btn btn-primary">Cadastre-se</a>
+                <a href="login.html" class="btn btn-secondary">Entrar</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-welcome" id="sobre">
+        <div class="welcome-text">
+            <h2>Bem-Vindo ao <span>EVEM</span></h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <div style="height: 2px; width: 100px; background: linear-gradient(to right, #7b2cbf, transparent);"></div>
+        </div>
+
+        <div class="about-visuals">
+            <div class="purple-circle-bg"></div>
+            <div class="pill-container pill-left">
+                <img src="/img/aa.jpg" alt="Imagem 1">
+            </div>
+            <div class="pill-container pill-right">
+                <img src="/img/bb.jpg" alt="Imagem 2">
+            </div>
+        </div>
+    </section> 
+   <section class="section-categories">
+        <h2><span>Categorias</span></h2>
+        <div class="categories-grid">
+            <div class="cat-card">
+                <i class="fa-solid fa-music"></i>
+                <span>Shows e<br>Festas</span>
+            </div>
+            <div class="cat-card">
+                <i class="fa-solid fa-chalkboard-user"></i>
+                <span>Cursos e<br>Workshops</span>
+            </div>
+            <div class="cat-card">
+                <i class="fa-solid fa-masks-theater"></i>
+                <span>Teatro e<br>Cultura</span>
+            </div>
+            <div class="cat-card">
+                <i class="fa-solid fa-person-running"></i>
+                <span>Esportes e<br>Bem-estar</span>
+            </div>
+            <div class="cat-card">
+                <i class="fa-solid fa-briefcase"></i>
+                <span>Negócios e<br>Carreira</span>
+            </div>
+            <div class="cat-card">
+                <i class="fa-solid fa-rocket"></i>
+                <span>Tecnologia e<br>Inovação</span>
+            </div>
+            <div class="cat-card">
+                <i class="fa-solid fa-utensils"></i>
+                <span>Gastronomia<br>e Bebidas</span>
+            </div>
+            <div class="cat-card">
+                <i class="fa-solid fa-book-bible"></i>
+                <span>Religião e<br>Espiritualidade</span>
+            </div>
+            <div class="cat-card">
+                <i class="fa-solid fa-people-roof"></i>
+                <span>Infantil e<br>Família</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-featured">
+        <div class="section-header">
+            <i class="fa-regular fa-calendar-plus" style="font-size: 2rem; color: #d62f98;"></i>
+            <h2>Próximos eventos em <span>destaque</span></h2>
+        </div>
+
+        <div class="carousel-container">
+            <div class="carousel-track" id="track">
+                <div class="event-card">
+                    <a href="event-details.html" class="img-link">
+                        <img src="/img/poster-raphael.jpg" alt="Raphael Ghanem">
+                    </a>
+                    <div class="event-overlay">
+                        <h3>Raphael Ghanem</h3>
+                        <p>Salvador - BA</p>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <a href="event-details.html" class="img-link">
+                        <img src="/img/poster-raphael.jpg" alt="Raphael Ghanem">
+                    </a>
+                    <div class="event-overlay">
+                        <h3>Show Extra</h3>
+                        <p>Salvador - BA</p>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <a href="event-details.html" class="img-link">
+                        <img src="/img/poster-raphael.jpg" alt="Raphael Ghanem">
+                    </a>
+                    <div class="event-overlay">
+                        <h3>Final Tour</h3>
+                        <p>Salvador - BA</p>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <a href="event-details.html" class="img-link">
+                        <img src="/img/poster-raphael.jpg" alt="Raphael Ghanem">
+                    </a>
+                    <div class="event-overlay">
+                        <h3>Encerramento</h3>
+                        <p>Salvador - BA</p>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <a href="event-details.html" class="img-link">
+                         <img src="/img/poster-raphael.jpg" alt="Raphael Ghanem">
+                    </a>
+                    <div class="event-overlay">
+                        <h3>Sessão Extra 2</h3>
+                        <p>Salvador - BA</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-controls">
+                <button class="nav-arrow" id="prev"><i class="fa-solid fa-circle-chevron-left"></i></button>
+                <div id="dots-container" style="display: flex; gap: 8px; align-items: center;"></div>
+                <button class="nav-arrow" id="next"><i class="fa-solid fa-circle-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <div class="back-to-top" id="backToTop">
+        <i class="fa-solid fa-arrow-up"></i> De volta ao topo
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>Sobre nós</h3>
+                <p>A EVEM é uma plataforma de gerenciamento de eventos.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Contato</h3>
+                <p>Email: contato@evem.com.br</p>
+            </div>
+            <div class="footer-col">
+                <h3>Navegue</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Início</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 EVEM - Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+
+</body>
+</html>
