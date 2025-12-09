@@ -13,9 +13,6 @@ body {
     padding: 20px;
 }
 
-/* Utilitário para esconder telas */
-.hidden { display: none !important; }
-
 /* O Cartão Geral */
 .signup-card {
     width: 100%;

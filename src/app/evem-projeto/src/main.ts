@@ -1,5 +1,5 @@
 import './style.css' // Importa seu CSS
-import { Carousel } from './Carousel' // Importa a classe que criamos
+import { Carousel } from './Carousel' 
 
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializa o Carrossel
