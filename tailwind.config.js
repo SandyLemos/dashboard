@@ -1,7 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  // 1. Sintaxe do Módulo: Priorizando CommonJS (module.exports)
   darkMode: ["class"],
-  content: ["./src/**/*.{ts,tsx,js,jsx}"],
+  content: [
+    // 2. Content: Consolidando caminhos de ambas as branches
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
       colors: {
@@ -11,7 +16,7 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
 
-        // --- CORES DE AÇÃO PADRÃO (OK) ---
+        // --- CORES DE AÇÃO PADRÃO (CONSOLIDADAS) ---
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -29,7 +34,7 @@ module.exports = {
           foreground: "hsl(var(--accent-foreground))",
         },
 
-        // --- CORES DA INTERFACE PADRÃO (OK) ---
+        // --- CORES DA INTERFACE PADRÃO (CONSOLIDADAS) ---
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -43,11 +48,11 @@ module.exports = {
           foreground: "hsl(var(--popover-foreground))",
         },
 
-        // Cores utilitárias específicas:
+        // Cores utilitárias específicas (Da HEAD):
         "input-background": "hsl(var(--input-background))",
         "switch-background": "hsl(var(--switch-background))",
 
-        // Cores da Sidebar:
+        // Cores da Sidebar (Da HEAD):
         sidebar: "hsl(var(--sidebar))",
         "sidebar-foreground": "hsl(var(--sidebar-foreground))",
         "sidebar-primary": {
@@ -61,7 +66,7 @@ module.exports = {
         "sidebar-border": "hsl(var(--sidebar-border))",
         "sidebar-ring": "hsl(var(--sidebar-ring))",
 
-        // Cores de Gráfico (Chart):
+        // Cores de Gráfico (Chart, Da HEAD):
         "chart-1": "hsl(var(--chart-1))",
         "chart-2": "hsl(var(--chart-2))",
         "chart-3": "hsl(var(--chart-3))",
@@ -73,7 +78,7 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      // Adicionando mapeamento para pesos de fonte
+      // Adicionando mapeamento para pesos de fonte (Da HEAD):
       fontWeight: {
         normal: "var(--font-weight-normal)",
         medium: "var(--font-weight-medium)",

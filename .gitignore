@@ -9,23 +9,27 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
-# testing
-/coverage
+dist
+dist-ssr
+/build
 
 # next.js
 /.next/
 out/
+next-env.d.ts
 
-# production
-/build
-dist
-dist-ssr
+# testing
+/coverage
 
 # misc
 .DS_Store
 *.pem
 *.local
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # debug & logs
 logs
@@ -43,16 +47,10 @@ lerna-debug.log*
 # vercel
 .vercel
 
+# typescript
+*.tsbuildinfo
+
 # editors
 .vscode/*
 !.vscode/extensions.json
 .idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
