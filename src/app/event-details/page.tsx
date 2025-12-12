@@ -1,21 +1,52 @@
-import React, { useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { Navbar } from "../components/Navbar";
-import { 
-  Calendar, 
-  MapPin, 
-  Clock, 
-  Share2, 
-  Heart, 
-  Info, 
+"use client"
+
+import React, { useEffect } from "react"
+import { useParams } from "next/navigation"
+import Link from "next/link"
+import { Navbar } from "../evem-projeto/components/Navbar"
+import {
+  Calendar,
+  MapPin,
+  Clock,
+  Share2,
+  Heart,
+  Info,
   CheckCircle,
   Ticket,
   ShieldCheck,
-  ChevronLeft
-} from "lucide-react";
+  ChevronLeft,
+} from "lucide-react"
 
-// Dados simulados detalhados (Mock)
-const eventDetailsMock = {
+type EventScheduleItem = {
+  day: string
+  month: string
+  title: string
+  time: string
+}
+
+type EventData = {
+  id: number
+  title: string
+  category: string
+  imageHero: string
+  dateRange: string
+  fullDate: string
+  time: string
+  locationName: string
+  address: string
+  price: string
+  description: string[]
+  organizer: string
+  schedule: EventScheduleItem[]
+}
+
+type EventDetailsMock = {
+  [key: string]: EventData
+  default: EventData
+}
+
+// Dados simulados detalhados (Mock) com a tipagem aplicada
+const eventDetailsMock: EventDetailsMock = {
   "1": {
     id: 1,
     title: "RAPHAEL GHANEM - SE É QUE VOCÊ ME ENTENDE!",
@@ -29,16 +60,31 @@ const eventDetailsMock = {
     price: "80,00",
     description: [
       'Com texto, interpretação e direção de Raphael Ghanem, "Se é que você me entende" é um espetáculo de Stand up Comedy, repleto de interações e improvisações, feito com texto 100% autoral e sem auxílio de figurinos, perucas e adereços.',
-      "O show que tem a duração de 1h20 min, conta com as histórias de vida do artista, além de suas análises de relacionamento, causos rotineiros, e uma perspectiva um tanto quanto exagerada do cotidiano."
+      "O show que tem a duração de 1h20 min, conta com as histórias de vida do artista, além de suas análises de relacionamento, causos rotineiros, e uma perspectiva um tanto quanto exagerada do cotidiano.",
     ],
     organizer: "Non Stop Produções",
     schedule: [
-      { day: "27", month: "NOV", title: "Sessão Extra", time: "19:00 (Abertura: 18:00)" },
-      { day: "27", month: "NOV", title: "Sessão Principal", time: "22:00 (Abertura: 21:00)" },
-      { day: "28", month: "NOV", title: "Sessão Final", time: "21:00 (Abertura: 20:00)" },
-    ]
+      {
+        day: "27",
+        month: "NOV",
+        title: "Sessão Extra",
+        time: "19:00 (Abertura: 18:00)",
+      },
+      {
+        day: "27",
+        month: "NOV",
+        title: "Sessão Principal",
+        time: "22:00 (Abertura: 21:00)",
+      },
+      {
+        day: "28",
+        month: "NOV",
+        title: "Sessão Final",
+        time: "21:00 (Abertura: 20:00)",
+      },
+    ],
   },
-  "103": { // ID do card da lista
+  "103": {
     id: 103,
     title: "RAPHAEL GHANEM - SE É QUE VOCÊ ME ENTENDE!",
     category: "Stand Up Comedy",
@@ -53,9 +99,9 @@ const eventDetailsMock = {
       'Com texto, interpretação e direção de Raphael Ghanem, "Se é que você me entende" é um espetáculo de Stand up Comedy, repleto de interações e improvisações.',
     ],
     organizer: "Non Stop Produções",
-    schedule: []
+    schedule: [],
   },
-  "101": { // Festival de Delícias
+  "101": {
     id: 101,
     title: "Festival de delícias culinárias",
     category: "Gastronomia",
@@ -68,12 +114,12 @@ const eventDetailsMock = {
     price: "150,00",
     description: [
       "Lorem ipsum dolor sit amet consectetur adipiscing elit. Dolor sit amet consectetur adipiscing elit quisque faucibus.",
-      "Venha provar os melhores pratos da região!"
+      "Venha provar os melhores pratos da região!",
     ],
     organizer: "Chef Eventos",
-    schedule: []
+    schedule: [],
   },
-  "default": {
+  default: {
     id: 0,
     title: "Evento Exemplo",
     category: "Categoria",
@@ -86,18 +132,20 @@ const eventDetailsMock = {
     price: "0,00",
     description: ["Descrição detalhada do evento aparecerá aqui."],
     organizer: "Organizador",
-    schedule: []
-  }
-};
+    schedule: [],
+  },
+} as const
 
 export default function EventDetailsPage() {
-  const { id } = useParams();
-  // @ts-ignore
-  const event = eventDetailsMock[id as string] || eventDetailsMock["default"];
+  const params = useParams()
+  const id = params.id as string | undefined
+
+  const event: EventData =
+    eventDetailsMock[id ?? "default"] || eventDetailsMock["default"]
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [id]);
+    window.scrollTo(0, 0)
+  }, [id])
 
   return (
     <div className="min-h-screen bg-[#f4f4f8] text-[#333]">
@@ -105,10 +153,13 @@ export default function EventDetailsPage() {
 
       {/* --- HERO SECTION (Banner Escuro) --- */}
       <div className="bg-[#0d001a] text-white py-12 px-6 md:px-16 relative overflow-hidden">
-        
         {/* Botão Voltar */}
         <div className="max-w-6xl mx-auto mb-6 relative z-20">
-          <Link to="/events" className="flex items-center gap-2 text-gray-400 hover:text-white transition w-fit">
+          <Link
+            // Usando 'href' do Next.js
+            href="/events"
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition w-fit"
+          >
             <ChevronLeft className="w-5 h-5" /> Voltar para eventos
           </Link>
         </div>
@@ -120,10 +171,10 @@ export default function EventDetailsPage() {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-10 items-center relative z-10">
           {/* Imagem do Evento */}
           <div className="w-full md:w-[400px] h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 flex-shrink-0 group">
-            <img 
-              src={event.imageHero} 
-              alt={event.title} 
-              className="w-full h-full object-cover transform group-hover:scale-105 transition duration-700" 
+            <img
+              src={event.imageHero}
+              alt={event.title}
+              className="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"
             />
           </div>
 
@@ -147,7 +198,9 @@ export default function EventDetailsPage() {
               </div>
               <div className="flex items-center gap-3 justify-center md:justify-start">
                 <MapPin className="text-[#d62f98] w-5 h-5" />
-                <span className="text-lg">{event.locationName} - {event.address}</span>
+                <span className="text-lg">
+                  {event.locationName} - {event.address}
+                </span>
               </div>
             </div>
 
@@ -165,10 +218,8 @@ export default function EventDetailsPage() {
 
       {/* --- CONTEÚDO PRINCIPAL (Grid) --- */}
       <main className="max-w-6xl mx-auto px-6 md:px-10 py-12 grid grid-cols-1 lg:grid-cols-3 gap-10">
-        
         {/* COLUNA DA ESQUERDA */}
         <div className="lg:col-span-2 space-y-10">
-          
           <section>
             <h2 className="text-2xl font-bold text-black mb-6 border-b-4 border-[#d62f98] inline-block pb-1">
               Sobre este evento
@@ -178,12 +229,13 @@ export default function EventDetailsPage() {
                 <p key={index}>{paragraph}</p>
               ))}
             </div>
-            
+
             <div className="mt-6 bg-[#fff4e5] border-l-4 border-orange-400 p-4 rounded-r-lg">
               <p className="text-orange-800 text-sm font-medium flex items-start gap-2">
                 <Info className="w-5 h-5 flex-shrink-0" />
                 <span>
-                  <strong>Classificação Indicativa:</strong> 16 anos. Menores de 16 anos somente acompanhados dos pais ou responsáveis legais.
+                  <strong>Classificação Indicativa:</strong> 16 anos. Menores de
+                  16 anos somente acompanhados dos pais ou responsáveis legais.
                 </span>
               </p>
             </div>
@@ -193,13 +245,19 @@ export default function EventDetailsPage() {
             <h2 className="text-2xl font-bold text-black mb-6 border-b-4 border-[#d62f98] inline-block pb-1">
               Cronograma
             </h2>
-            
+
             {event.schedule && event.schedule.length > 0 ? (
               <ul className="space-y-4">
-                {event.schedule.map((item: any, idx: number) => (
-                  <li key={idx} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition-shadow">
+                {/* O loop agora usa o tipo EventScheduleItem */}
+                {event.schedule.map((item: EventScheduleItem, idx: number) => (
+                  <li
+                    key={idx}
+                    className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition-shadow"
+                  >
                     <div className="bg-[#f3e5f5] text-[#7b1fa2] p-3 rounded-lg text-center min-w-[70px]">
-                      <span className="block text-2xl font-bold leading-none">{item.day}</span>
+                      <span className="block text-2xl font-bold leading-none">
+                        {item.day}
+                      </span>
                       <span className="text-xs font-bold">{item.month}</span>
                     </div>
                     <div>
@@ -226,7 +284,9 @@ export default function EventDetailsPage() {
               </div>
               <div>
                 <p className="font-bold text-gray-800">{event.organizer}</p>
-                <button className="text-[#0085D7] text-sm font-medium hover:underline">Entre em contato</button>
+                <button className="text-[#0085D7] text-sm font-medium hover:underline">
+                  Entre em contato
+                </button>
               </div>
             </div>
           </section>
@@ -238,7 +298,9 @@ export default function EventDetailsPage() {
             <div className="flex justify-between items-start mb-6 pb-6 border-b border-gray-100">
               <div>
                 <p className="text-sm text-gray-500 mb-1">A partir de</p>
-                <h3 className="text-3xl font-bold text-[#d62f98]">R$ {event.price}</h3>
+                <h3 className="text-3xl font-bold text-[#d62f98]">
+                  R$ {event.price}
+                </h3>
               </div>
               <div className="bg-green-100 text-green-700 p-2 rounded-lg">
                 <Ticket className="w-6 h-6" />
@@ -247,17 +309,18 @@ export default function EventDetailsPage() {
 
             <div className="space-y-4 mb-6">
               <div className="flex items-center gap-3 text-sm text-gray-600">
-                <CheckCircle className="w-4 h-4 text-green-500" /> 
+                <CheckCircle className="w-4 h-4 text-green-500" />
                 <span>Ingresso digital instantâneo</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-600">
-                <CheckCircle className="w-4 h-4 text-green-500" /> 
+                <CheckCircle className="w-4 h-4 text-green-500" />
                 <span>Cancelamento até 48h antes</span>
               </div>
             </div>
 
-            <Link 
-              to="/payment" 
+            <Link
+              // Usando 'href' do Next.js
+              href="/payment"
               className="block w-full bg-[#0085D7] hover:bg-[#006bb3] text-white text-center font-bold py-4 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
             >
               Comprar Ingresso
@@ -269,12 +332,13 @@ export default function EventDetailsPage() {
             </div>
           </div>
         </div>
-
       </main>
 
       <footer className="bg-[#e6e6e6] text-center py-8 mt-10 border-t border-gray-300">
-        <p className="text-gray-500 text-sm">© 2025 EVEM – Todos os direitos reservados.</p>
+        <p className="text-gray-500 text-sm">
+          © 2025 EVEM – Todos os direitos reservados.
+        </p>
       </footer>
     </div>
-  );
+  )
 }

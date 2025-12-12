@@ -1,30 +1,32 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+"use client"
+
+import React from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
-  const navigate = useNavigate();
+  const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     // Aqui viria a lógica de autenticação
-    console.log("Login enviado");
-    navigate("/events"); // Simula o redirecionamento
-  };
+    console.log("Login enviado")
+    router.push("/events") // Simula o redirecionamento
+  }
 
   return (
     // Container Principal com Imagem de Fundo
     <div className="min-h-screen w-full flex items-center justify-center bg-[#1a0b2e] bg-[url('/img/fundo-hero.png')] bg-cover bg-center p-4">
-      
       {/* Card de Login (Efeito de Vidro) */}
       <div className="w-full max-w-[380px] p-8 rounded-xl border border-white/10 bg-[#1e0a32]/60 backdrop-blur-md shadow-2xl text-center text-white">
-        
         <h2 className="text-3xl font-bold mb-8">Login</h2>
 
         <form onSubmit={handleSubmit} className="text-left flex flex-col gap-5">
-          
           {/* Input Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-semibold mb-2">Email</label>
+            <label htmlFor="email" className="block text-sm font-semibold mb-2">
+              Email
+            </label>
             <input
               id="email"
               type="email"
@@ -36,7 +38,12 @@ export default function LoginPage() {
 
           {/* Input Senha */}
           <div>
-            <label htmlFor="password" className="block text-sm font-semibold mb-2">Senha</label>
+            <label
+              htmlFor="password"
+              className="block text-sm font-semibold mb-2"
+            >
+              Senha
+            </label>
             <input
               id="password"
               type="password"
@@ -49,9 +56,13 @@ export default function LoginPage() {
           {/* Opções (Lembrar / Esqueci senha) */}
           <div className="flex justify-between items-center text-xs text-gray-300">
             <label className="flex items-center gap-2 cursor-pointer hover:text-white">
-              <input type="checkbox" className="accent-[#d62f98]" /> Lembrar de mim
+              <input type="checkbox" className="accent-[#d62f98]" /> Lembrar de
+              mim
             </label>
-            <a href="#" className="text-[#eebb58] font-semibold hover:underline">
+            <a
+              href="#"
+              className="text-[#eebb58] font-semibold hover:underline"
+            >
               Esqueceu a senha?
             </a>
           </div>
@@ -67,16 +78,22 @@ export default function LoginPage() {
           {/* Links de Rodapé */}
           <div className="mt-4 text-center text-sm text-gray-400">
             Não tem uma conta?{" "}
-            <Link to="/signup" className="text-[#eebb58] font-semibold hover:underline">
+            <Link
+              href="/signup"
+              className="text-[#eebb58] font-semibold hover:underline"
+            >
               Cadastre-se
             </Link>
           </div>
 
-          <Link to="/" className="block mt-2 text-center text-xs text-gray-500 hover:text-white transition">
+          <Link
+            href="/"
+            className="block mt-2 text-center text-xs text-gray-500 hover:text-white transition"
+          >
             ← Voltar para o site
           </Link>
         </form>
       </div>
     </div>
-  );
+  )
 }

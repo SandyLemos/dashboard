@@ -57,3 +57,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Largura da barra de rolagem */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  /* Cor e estilo para o "polegar" (parte que se move) */
+  background-color: #d62f98; /* Use a cor do seu tema (cor-chave) */
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  /* Cor e estilo para o "trilho" (fundo da barra) */
+  background: #1e0a32; /* Cor de fundo escura para contraste */
+}
+
+/* Estilos para navegadores Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin; /* 'auto' ou 'thin' */
+  scrollbar-color: #d62f98 #1e0a32; /* cor do polegar e cor do trilho */
+}

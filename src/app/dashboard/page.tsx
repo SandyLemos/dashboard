@@ -1,5 +1,7 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import "./styles/globals.css"
+
+import { useState, useEffect } from "react"
 import {
   Plus,
   Calendar,
@@ -15,24 +17,24 @@ import {
   Attendee,
   Activity,
   ActivityFormData,
-} from "../types/event" // Ajuste o caminho se necessário
-import { EventCard } from "../components/EventCard" // Ajuste o caminho se necessário
-import { EventForm } from "../components/EventForm" // Ajuste o caminho se necessário
-import { EventDetails } from "../components/EventDetails" // Ajuste o caminho se necessário
-import { EventFiltersComponent, EventFilters } from "../components/EventFilters" // Ajuste o caminho se necessário
-import { Dashboard } from "../components/Dashboard" // Ajuste o caminho se necessário
-import { AttendeesView } from "../components/AttendeesView" // Ajuste o caminho se necessário
-import { ActivitiesView } from "../components/ActivitiesView" // Ajuste o caminho se necessário
-import { Button } from "../components/ui/button" // Ajuste o caminho se necessário
-import { Badge } from "../components/ui/badge" // Ajuste o caminho se necessário
+} from "./types/event"
+import { EventCard } from "./components/EventCard"
+import { EventForm } from "./components/EventForm"
+import { EventDetails } from "./components/EventDetails"
+import { EventFiltersComponent, EventFilters } from "./components/EventFilters"
+import { Dashboard } from "./components/Dashboard"
+import { AttendeesView } from "./components/AttendeesView"
+import { ActivitiesView } from "./components/ActivitiesView"
+import { Button } from "./components/ui/button"
+import { Badge } from "./components/ui/badge"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../components/ui/select" // Ajuste o caminho se necessário
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs" // Ajuste o caminho se necessário
+} from "./components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs"
 import { Toaster, toast } from "sonner"
 import {
   createEventFromFormData,
@@ -40,11 +42,10 @@ import {
   filterEvents,
   sortEvents,
   updateEventStatuses,
-} from "../utils/eventUtils" // Ajuste o caminho se necessário
-import { mockEvents, mockAttendees, mockActivities } from "../data/mockData" // Ajuste o caminho se necessário
+} from "./utils/eventUtils"
+import { mockEvents, mockAttendees, mockActivities } from "./data/mockData"
 
-// Renomeado de App() para AdminDashboardPage() para ser uma página
-export default function AdminDashboardPage() {
+export default function App() {
   const [events, setEvents] = useState<Event[]>(mockEvents)
   const [attendees, setAttendees] = useState<Attendee[]>(mockAttendees)
   const [activities, setActivities] = useState<Activity[]>(mockActivities)

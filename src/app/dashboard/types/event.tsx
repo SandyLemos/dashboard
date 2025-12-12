@@ -113,3 +113,31 @@ export interface Attendee {
   paymentStatus: "paid" | "pending" | "cancelled"
   purchaseDate: string
 }
+
+type EventScheduleItem = {
+  day: string
+  month: string
+  title: string
+  time: string
+}
+
+type EventData = {
+  id: number
+  title: string
+  category: string
+  imageHero: string
+  dateRange: string
+  fullDate: string
+  time: string
+  locationName: string
+  address: string
+  price: string
+  description: string[]
+  organizer: string
+  schedule: EventScheduleItem[]
+}
+
+type EventDetailsMock = {
+  [key: string]: EventData
+  default: EventData // Garantir que 'default' está sempre presente
+}

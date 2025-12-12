@@ -1,9 +1,8 @@
-import "../styles/globals.css"
+import "./dashboard/styles/globals.css"
+import { globalMetadata } from "./metadata"
 
-export const metadata = {
-  title: "Dashboard",
-  description: "Sistema de gerenciamento de eventos",
-}
+
+export const metadata = globalMetadata
 
 export default function RootLayout({
   children,

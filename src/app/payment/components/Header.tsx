@@ -1,6 +1,8 @@
 "use client"
 
 import React, { useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import Image from "next/image"
 
 // Interface básica para as propriedades dos ícones (apenas classes Tailwind/CSS)
@@ -74,17 +76,23 @@ const LOGO_HEIGHT = 80;
 
 const Header: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const router = useRouter()
+
+  const handleLogout = () => {
+    // TODO: Implementar a lógica de limpeza de token/sessão aqui
+    setIsDropdownOpen(false)
+    router.push("/login") // Navegar para a tela de Login ou Landing Page
+  }
 
   return (
     <header className="py-4 text-center">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* 1. Espaçador Esquerdo (Para centralizar a logo) */}
-        {/* Este div deve ter a mesma largura do ícone de usuário para centralização visual */}
-        <div className="w-[125px] flex-shrink-0 lg:w-[100px]">
-        </div>
+        {/* 1. Espaçador Esquerdo */}
+        <div className="w-[125px] flex-shrink-0 lg:w-[100px]"></div>
 
         <div className="flex flex-grow justify-center">
-          <div
+          <Link
+            href="/events"
             className="relative"
             style={{ width: LOGO_WIDTH, height: LOGO_HEIGHT }}
           >
@@ -95,10 +103,9 @@ const Header: React.FC = () => {
               height={LOGO_HEIGHT}
               priority
             />
-          </div>
+          </Link>
         </div>
 
-        
         {/* Ícone do Usuário (Menu Dropdown) */}
         <div className="relative">
           <button
@@ -132,33 +139,40 @@ const Header: React.FC = () => {
 
               {/* Lista de Links */}
               <nav className="py-1">
-                <a
-                  href="#"
+                {/* Minha Conta */}
+                <Link
+                  href="/account"
+                  onClick={() => setIsDropdownOpen(false)} // Fecha o menu
                   className="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 transition duration-150"
                 >
                   <IconAccount className="w-5 h-5 mr-3 text-indigo-500" /> Minha
-                  conta
-                </a>
-                <a
-                  href="#"
+                  conta 
+                </Link>
+                {/* Meus Ingressos */}
+                <Link
+                  href="/tickets"
+                  onClick={() => setIsDropdownOpen(false)}
                   className="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 transition duration-150"
                 >
                   <IconTickets className="w-5 h-5 mr-3 text-indigo-500" /> Meus
-                  Ingressos
-                </a>
-                <a
-                  href="#"
+                  Ingressos 
+                </Link>
+                {/* Favoritos */}
+                <Link
+                  href="/favorites"
+                  onClick={() => setIsDropdownOpen(false)}
                   className="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 transition duration-150"
                 >
-                  <IconHeart className="w-5 h-5 mr-3 text-indigo-500" />{" "}
-                  Favoritos
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center px-4 py-3 text-red-600 hover:bg-red-50 transition duration-150 border-t mt-1"
+                  <IconHeart className="w-5 h-5 mr-3 text-indigo-500" />
+                  Favoritos 
+                </Link>
+                {/* Sair (agora é um botão para lidar com o logout programático) */}
+                <button
+                  onClick={handleLogout}
+                  className="flex w-full items-center px-4 py-3 text-red-600 hover:bg-red-50 transition duration-150 border-t mt-1"
                 >
-                  <IconLogout className="w-5 h-5 mr-3 text-red-600" /> Sair
-                </a>
+                  <IconLogout className="w-5 h-5 mr-3 text-red-600" /> Sair 
+                </button>
               </nav>
             </div>
           )}
