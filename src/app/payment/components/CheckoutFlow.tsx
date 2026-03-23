@@ -6,6 +6,7 @@ import StepOneReceiver from "./StepOneReceiver"
 import StepTwoPayment from "./StepTwoPayment"
 import OrderSummary from "./OrderSummary"
 import Image from "next/image"
+import Link from "next/link"
 
 const CheckoutFlow: React.FC = () => {
   const { currentStep, setCurrentStep, paymentData, paymentStatus } =
@@ -89,9 +90,11 @@ const CheckoutFlow: React.FC = () => {
                 : "Seu ingresso será enviado assim que o pagamento PIX for confirmado (geralmente em segundos)."}
             </p>
 
-            <button className="mt-4 w-48 rounded-md bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-700 transition">
-              Ver Meus Ingressos
-            </button>
+            <Link href="/tickets">
+              <button className="mt-4 w-48 rounded-md bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-700 transition">
+                Ver Meus Ingressos
+              </button>
+            </Link>
           </div>
         )
       default:

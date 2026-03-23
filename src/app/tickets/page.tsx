@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react" // Adicionado useEffect
 import Link from "next/link"
 import { Navbar } from "../evem-projeto/components/Navbar"
 import {
@@ -17,35 +17,12 @@ import {
   Utensils,
   BookOpen,
   Baby,
+  Clock, // Adicionado ícone para pendentes
 } from "lucide-react"
 
-// Mock Data para Ingressos "Ativos"
-const myTickets = [
-  {
-    id: 101,
-    title: "Festival de delícias culinárias",
-    description: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-    categoryLabel: "Gastronomia e bebidas",
-    location: "The Plaza, San Francisco, CA",
-    date: "Quarta, 15 a 23 de Out - 13:00",
-    imageSrc: "/img/breakfast.jpg",
-    status: "active",
-    type: "Ingresso Único",
-  },
-  {
-    id: 103,
-    title: "Raphael Ghanem",
-    description: "Se é que você me entende - Stand up Comedy.",
-    categoryLabel: "Stand up comedy",
-    location: "BeFly Minascentro",
-    date: "Sexta às 22h00",
-    imageSrc: "/img/poster-raphael.jpg",
-    status: "active",
-    type: "VIP",
-  },
-]
 
-// Mock Data para Categorias
+
+// Mock Data original mantido como fallback (opcional) ou você pode remover
 const categories = [
   { icon: Music, label: "Shows e Festas", slug: "shows" },
   { icon: MonitorPlay, label: "Cursos e Workshops", slug: "cursos" },
@@ -60,8 +37,26 @@ const categories = [
 
 export default function TicketsPage() {
   const [activeTab, setActiveTab] = useState("Ativos")
+  const [allTickets, setAllTickets] = useState<any[]>([]) // Estado para os ingressos automatizados
 
   const tabs = ["Ativos", "Pendentes", "Cancelados", "Encerrados"]
+
+  // --- LÓGICA DE AUTOMAÇÃO ---
+  useEffect(() => {
+    const saved = localStorage.getItem("@evem:tickets")
+    if (saved) {
+      setAllTickets(JSON.parse(saved))
+    }
+  }, [])
+
+  // Filtragem baseada no status do localStorage e na aba ativa
+  const filteredTickets = allTickets.filter((ticket) => {
+    if (activeTab === "Ativos") return ticket.status === "active"
+    if (activeTab === "Pendentes") return ticket.status === "pending"
+    if (activeTab === "Cancelados") return ticket.status === "cancelled"
+    if (activeTab === "Encerrados") return ticket.status === "finished"
+    return false
+  })
 
   return (
     <div className="min-h-screen bg-[#dae4f8] pb-10 flex flex-col items-center">
@@ -78,7 +73,6 @@ export default function TicketsPage() {
 
         {/* Barra de Controles: Abas e Busca */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-          {/* Abas */}
           <div className="flex gap-3 overflow-x-auto pb-2 w-full md:w-auto scrollbar-hide">
             {tabs.map((tab) => (
               <button
@@ -95,7 +89,6 @@ export default function TicketsPage() {
             ))}
           </div>
 
-          {/* Busca */}
           <div className="relative w-full md:w-[400px]">
             <input
               type="text"
@@ -106,12 +99,11 @@ export default function TicketsPage() {
           </div>
         </div>
 
-        {/* --- CONTEÚDO PRINCIPAL (LÓGICA DE TROCA) --- */}
+        {/* --- CONTEÚDO PRINCIPAL (LÓGICA AUTOMATIZADA) --- */}
         <div className="min-h-[300px]">
-          {activeTab === "Ativos" ? (
-            // Lista de Ingressos (Aparece apenas na aba Ativos)
+          {filteredTickets.length > 0 ? (
             <div className="flex flex-col gap-6">
-              {myTickets.map((ticket) => (
+              {filteredTickets.map((ticket) => (
                 <div
                   key={ticket.id}
                   className="bg-white rounded-3xl p-4 flex flex-col md:flex-row gap-6 items-center shadow-sm border-2 border-transparent hover:border-[#0085D7] hover:shadow-md transition-all duration-300"
@@ -119,7 +111,7 @@ export default function TicketsPage() {
                   {/* Imagem */}
                   <div className="w-full md:w-[200px] h-[140px] flex-shrink-0 rounded-2xl overflow-hidden relative">
                     <img
-                      src={ticket.imageSrc}
+                      src={ticket.imageSrc || ticket.img} // Suporta imageSrc ou img conforme o objeto salvo
                       alt={ticket.title}
                       className="w-full h-full object-cover"
                     />
@@ -128,13 +120,14 @@ export default function TicketsPage() {
                   {/* Informações */}
                   <div className="flex-grow text-center md:text-left w-full">
                     <span className="inline-block px-3 py-1 rounded-full text-[10px] font-bold mb-2 bg-[#F3E5F5] text-[#7B1FA2]">
-                      {ticket.categoryLabel}
+                      {ticket.categoryLabel || ticket.category}
                     </span>
                     <h3 className="text-lg font-extrabold text-gray-900 mb-1">
                       {ticket.title}
                     </h3>
                     <p className="text-xs text-gray-500 max-w-lg mx-auto md:mx-0 mb-3">
-                      {ticket.description}
+                      {ticket.description ||
+                        "Ingresso adquirido via plataforma Evem."}
                     </p>
                     <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-start text-xs text-gray-600">
                       <span className="flex items-center gap-1">
@@ -148,21 +141,29 @@ export default function TicketsPage() {
                     </div>
                   </div>
 
-                  {/* Ação / Status */}
+                  {/* Ação / Status Dinâmico */}
                   <div className="w-full md:w-auto flex-shrink-0 flex flex-col items-center md:items-end gap-3 px-4">
                     <div className="bg-[#F3F0FA] px-4 py-2 rounded-lg flex items-center gap-2">
-                      <Ticket className="w-4 h-4 text-[#7b2cbf]" />
+                      {ticket.status === "active" ? (
+                        <Ticket className="w-4 h-4 text-[#7b2cbf]" />
+                      ) : (
+                        <Clock className="w-4 h-4 text-yellow-600" />
+                      )}
                       <div className="text-right">
                         <span className="block text-xs font-bold text-gray-800">
-                          {ticket.type}
+                          {ticket.type || "Entrada Geral"}
                         </span>
-                        <span className="block text-[10px] text-green-600 font-bold uppercase">
-                          Confirmado
+                        <span
+                          className={`block text-[10px] font-bold uppercase ${ticket.status === "active" ? "text-green-600" : "text-yellow-600"}`}
+                        >
+                          {ticket.status === "active"
+                            ? "Confirmado"
+                            : "Pendente"}
                         </span>
                       </div>
                     </div>
                     <Link
-                      href={`/event-details/${ticket.id}`}
+                      href={`/events/${ticket.id}`}
                       className="text-xs font-bold text-[#0085D7] hover:underline"
                     >
                       Ver detalhes do evento
@@ -172,10 +173,9 @@ export default function TicketsPage() {
               ))}
             </div>
           ) : (
-            // Estado Vazio (Aparece nas outras abas)
             <div className="bg-[#e8efff] rounded-3xl h-[400px] flex flex-col items-center justify-center gap-6 shadow-inner">
               <p className="text-gray-500 text-lg font-medium">
-                Não há ingressos nesta categoria
+                Não há ingressos na categoria {activeTab}
               </p>
               <Link
                 href="/events"
@@ -187,7 +187,7 @@ export default function TicketsPage() {
           )}
         </div>
 
-        {/* --- RODAPÉ DE CATEGORIAS --- */}
+        {/* Rodapé de Categorias (Mantido Exatamente Igual) */}
         <section className="mt-16 mb-10">
           <h2 className="text-2xl font-bold text-[#eebb58] mb-8 border-b-2 border-[#eebb58] inline-block pb-1 font-serif">
             Navegue por Categorias
