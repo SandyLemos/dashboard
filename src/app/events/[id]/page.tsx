@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { Navbar } from "../../evem-projeto/components/Navbar"
@@ -16,246 +16,91 @@ import {
   ShieldCheck,
   ChevronLeft,
 } from "lucide-react"
+import { mockEvents as staticEvents } from "../../dashboard/data/mockData"
 
-type EventScheduleItem = {
+// --- TIPAGEM ALINHADA ---
+interface LocationData {
+  city: string
+  state: string
+  address?: string
+}
+
+interface EventScheduleItem {
   day: string
   month: string
   title: string
   time: string
 }
 
-type EventData = {
-  id: number
+interface EventData {
+  id: number | string
   title: string
   category: string
-  imageHero: string
-  dateRange: string
-  fullDate: string
-  time: string
-  locationName: string
-  address: string
-  price: string
-  description: string[]
-  organizer: string
-  schedule: EventScheduleItem[]
+  categoryLabel?: string
+  description: string | string[] // Aceita string única ou array
+  location: string | LocationData
+  date?: string
+  dates?: { startDate: string; month?: string }[]
+  time?: string
+  price?: string | number
+  image?: string
+  imageSrc?: string
+  imageUrl?: string
+  imageHero?: string
+  organizer?: string
+  schedule?: EventScheduleItem[]
 }
-
-type EventDetailsMock = {
-  [key: string]: EventData
-  default: EventData
-}
-
-// Dados simulados detalhados (Mock) com a tipagem aplicada
-const eventDetailsMock: EventDetailsMock = {
-  // --- DESTAQUES (featuredEvents) ---
-  "1": {
-    id: 1,
-    title: "RETIRO ANUAL DE INTEGRAÇÃO DA EQUIPE",
-    category: "Social",
-    imageHero: "/img/Retiro-Anual-de-Integração.jpg",
-    dateRange: "19 de Dezembro",
-    fullDate: "Quinta, 19 de Dezembro de 2025",
-    time: "09:00",
-    locationName: "Mountain View Resort",
-    address: "Serra Negra - SP",
-    price: "250,00",
-    description: [
-      "Um momento exclusivo para fortalecer os laços da equipe com atividades ao ar livre e workshops de liderança.",
-    ],
-    organizer: "RH Solutions",
-    schedule: [
-      { day: "19", month: "DEZ", title: "Café de Boas-vindas", time: "09:00" },
-    ],
-  },
-  "2": {
-    id: 2,
-    title: "FEIRA TECH — INOVAÇÃO E TECNOLOGIA",
-    category: "Technology",
-    imageHero: "/img/Feira-Tech.jpg",
-    dateRange: "09 de Dezembro",
-    fullDate: "Segunda, 09 de Dezembro de 2025",
-    time: "10:00",
-    locationName: "Centro de Convenções Anhembi",
-    address: "São Paulo - SP",
-    price: "45,00",
-    description: [
-      "Explore as últimas tendências em IA, robótica e gadgets que estão moldando o futuro.",
-    ],
-    organizer: "Tech Expo Brasil",
-    schedule: [
-      { day: "09", month: "DEZ", title: "Palestra de Abertura", time: "10:30" },
-    ],
-  },
-  "3": {
-    id: 3,
-    title: "OFICINA REACT - DESENVOLVIMENTO WEB",
-    category: "Education",
-    imageHero: "/img/Oficina-React.jpg",
-    dateRange: "04, 11 e 18 de Dezembro",
-    fullDate: "Quartas-feiras de Dezembro",
-    time: "19:00",
-    locationName: "Coworking Space RJ",
-    address: "Rio de Janeiro - RJ",
-    price: "120,00",
-    description: [
-      "Aprenda React do zero ao avançado com aulas práticas e construção de um projeto real.",
-    ],
-    organizer: "Dev Academy",
-    schedule: [
-      { day: "04", month: "DEZ", title: "Módulo 1: Hooks", time: "19:00" },
-    ],
-  },
-  "4": {
-    id: 4,
-    title: "RAPHAEL GHANEM — SE É QUE VOCÊ ME ENTENDE!",
-    category: "Entertainment",
-    imageHero: "/img/poster-raphael.jpg",
-    dateRange: "27 de Novembro",
-    fullDate: "Quinta, 27 de Novembro de 2025",
-    time: "22:00",
-    locationName: "BeFly Minascentro",
-    address: "Belo Horizonte - MG",
-    price: "80,00",
-    description: [
-      "O show conta com as histórias de vida do artista, além de suas análises de relacionamento e causos rotineiros.",
-    ],
-    organizer: "Non Stop Produções",
-    schedule: [
-      { day: "27", month: "NOV", title: "Sessão Única", time: "22:00" },
-    ],
-  },
-  "5": {
-    id: 5,
-    title: "FESTIVAL DE DELÍCIAS CULINÁRIAS",
-    category: "Gastronomy",
-    imageHero: "/img/breakfast.jpg",
-    dateRange: "15 a 23 de Outubro",
-    fullDate: "Outubro de 2025",
-    time: "12:00",
-    locationName: "Parque Barigui",
-    address: "Curitiba - PR",
-    price: "35,00",
-    description: [
-      "Venha saborear o melhor da gastronomia regional com pratos exclusivos de grandes chefs.",
-    ],
-    organizer: "Chef Eventos",
-    schedule: [],
-  },
-
-  // --- LISTA GERAL (listEvents) ---
-  "101": {
-    id: 101,
-    title: "MASTERCLASS DE IA GENERATIVA",
-    category: "Technology",
-    imageHero: "/img/Masterclass-de-IA.jpg",
-    dateRange: "15 a 23 de Outubro",
-    fullDate: "Quarta-feira, 15 de Outubro",
-    time: "13:00",
-    locationName: "Polo Tecnológico",
-    address: "Recife - PE",
-    price: "199,00",
-    description: [
-      "Uma imersão técnica sobre como implementar modelos de linguagem em fluxos de trabalho empresariais.",
-    ],
-    organizer: "AI Institute",
-    schedule: [],
-  },
-  "102": {
-    id: 102,
-    title: "FESTIVAL DE INVERNO: JAZZ & BLUES",
-    category: "Musical Shows",
-    imageHero: "/img/Festival-de-Inverno.jpg",
-    dateRange: "15 de Junho",
-    fullDate: "Sábado, 15 de Junho de 2025",
-    time: "19:00",
-    locationName: "Teatro de Arena",
-    address: "Vitória - ES",
-    price: "120,00",
-    description: [
-      "Uma noite inesquecível com os maiores expoentes do Jazz nacional sob as estrelas.",
-    ],
-    organizer: "Blue Note Produções",
-    schedule: [],
-  },
-  "103": {
-    id: 103,
-    title: "MARATONA DO SOL",
-    category: "Sports",
-    imageHero: "/img/Maratona-do-Sol.jpg",
-    dateRange: "20 de Abril",
-    fullDate: "Domingo, 20 de Abril de 2025",
-    time: "06:00",
-    locationName: "Orla da Praia",
-    address: "Fortaleza - CE",
-    price: "85,00",
-    description: [
-      "A maior corrida de rua da cidade. Supere seus limites em um cenário paradisíaco.",
-    ],
-    organizer: "Ceará Runner",
-    schedule: [],
-  },
-  "104": {
-    id: 104,
-    title: "DEGUSTAÇÃO DE VINHOS E QUEIJOS",
-    category: "Gastronomy",
-    imageHero: "/img/Degustacao-de-Vinhos-e-queijos.jpg",
-    dateRange: "10 de Agosto",
-    fullDate: "Sábado, 10 de Agosto de 2025",
-    time: "16:00",
-    locationName: "Bistrô Central",
-    address: "Bento Gonçalves - RS",
-    price: "180,00",
-    description: [
-      "Explore sabores artesanais de pequenos produtores locais em uma experiência sensorial única.",
-    ],
-    organizer: "Wine Experience",
-    schedule: [],
-  },
-  "105": {
-    id: 105,
-    title: "FESTIVAL CIENTISTAS DO FUTURO",
-    category: "Kids and Family",
-    imageHero: "/img/Festival-Cientistas-do-Futuro.jpg",
-    dateRange: "12 de Dezembro",
-    fullDate: "Sexta, 12 de Dezembro de 2025",
-    time: "14:00",
-    locationName: "Museu de Ciências",
-    address: "Porto Alegre - RS",
-    price: "40,00",
-    description: [
-      "Um dia inteiro de oficinas interativas e experimentos químicos seguros para crianças.",
-    ],
-    organizer: "Educa Kids",
-    schedule: [],
-  },
-
-  default: {
-    id: 0,
-    title: "Evento não encontrado",
-    category: "Geral",
-    imageHero: "/img/breakfast.jpg",
-    dateRange: "Indisponível",
-    fullDate: "Indisponível",
-    time: "00:00",
-    locationName: "Local não encontrado",
-    address: "-",
-    price: "0,00",
-    description: ["Este evento ainda não possui detalhes cadastrados."],
-    organizer: "Equipe EVEM",
-    schedule: [],
-  },
-} as const
 
 export default function EventDetailsPage() {
   const params = useParams()
-  const id = params.id as string | undefined
-
-  const event: EventData =
-    eventDetailsMock[id ?? "default"] || eventDetailsMock["default"]
+  const id = params.id as string
+  const [event, setEvent] = useState<EventData | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     window.scrollTo(0, 0)
+    
+    const loadEvent = () => {
+      try {
+        // 1. Busca no LocalStorage (Dashboard)
+        const stored = localStorage.getItem("@evem:events")
+        const dashboardEvents: EventData[] = stored ? JSON.parse(stored) : []
+        
+        // 2. Busca nos Estáticos
+        const allEvents = [...dashboardEvents, ...(staticEvents as unknown as EventData[])]
+        
+        // 3. Encontra o evento pelo ID
+        const found = allEvents.find((e) => String(e.id) === id)
+        setEvent(found || null)
+      } catch (error) {
+        console.error("Erro ao carregar evento:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadEvent()
   }, [id])
+
+  if (loading) return <div className="min-h-screen bg-[#f4f4f8] flex items-center justify-center font-bold">Carregando...</div>
+  
+  if (!event) {
+    return (
+      <div className="min-h-screen bg-[#f4f4f8] flex flex-col items-center justify-center gap-4">
+        <h1 className="text-2xl font-bold">Evento não encontrado</h1>
+        <Link href="/events" className="text-blue-600 underline">Voltar para a lista</Link>
+      </div>
+    )
+  }
+
+  // --- TRATAMENTO DE DADOS (FALLBACKS) ---
+  const displayImage = event.imageHero || event.imageUrl || event.imageSrc || event.image || "/img/placeholder.jpg"
+  const displayLocation = typeof event.location === "object" 
+    ? `${event.location.address ? event.location.address + " - " : ""}${event.location.city}, ${event.location.state}`
+    : event.location
+
+  const displayDate = event.date || event.dates?.[0]?.startDate || "Data a definir"
+  const displayDescription = Array.isArray(event.description) ? event.description : [event.description]
 
   return (
     <div className="min-h-screen bg-[#f4f4f8] text-[#333]">
@@ -282,7 +127,7 @@ export default function EventDetailsPage() {
           {/* Imagem do Evento */}
           <div className="w-full md:w-[400px] h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 flex-shrink-0 group">
             <img
-              src={event.imageHero}
+              src={displayImage}
               alt={event.title}
               className="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"
             />
@@ -300,7 +145,7 @@ export default function EventDetailsPage() {
             <div className="flex flex-col gap-3 text-gray-300">
               <div className="flex items-center gap-3 justify-center md:justify-start">
                 <Calendar className="text-[#d62f98] w-5 h-5" />
-                <span className="text-lg">{event.dateRange}</span>
+                <span className="text-lg">{displayDate}</span>
               </div>
               <div className="flex items-center gap-3 justify-center md:justify-start">
                 <Clock className="text-[#d62f98] w-5 h-5" />
@@ -309,7 +154,7 @@ export default function EventDetailsPage() {
               <div className="flex items-center gap-3 justify-center md:justify-start">
                 <MapPin className="text-[#d62f98] w-5 h-5" />
                 <span className="text-lg">
-                  {event.locationName} - {event.address}
+                  {displayLocation}
                 </span>
               </div>
             </div>
@@ -335,7 +180,7 @@ export default function EventDetailsPage() {
               Sobre este evento
             </h2>
             <div className="text-gray-600 leading-relaxed text-base space-y-4">
-              {event.description.map((paragraph: string, index: number) => (
+              {displayDescription.map((paragraph: string, index: number) => (
                 <p key={index}>{paragraph}</p>
               ))}
             </div>
@@ -390,7 +235,7 @@ export default function EventDetailsPage() {
             <h3 className="font-bold text-gray-900 mb-2">Organizado por</h3>
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 font-bold text-xl">
-                {event.organizer.charAt(0)}
+                {(event.organizer || "E").charAt(0)}
               </div>
               <div>
                 <p className="font-bold text-gray-800">{event.organizer}</p>

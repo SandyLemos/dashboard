@@ -1,6 +1,7 @@
 export interface EventDate {
   id: string
-  date: string
+  startDate: string
+  endDate: string
   startTime: string
   endTime: string
 }
@@ -44,6 +45,8 @@ export interface Event {
   ticketPrice?: number
   ticketsSold?: number
   imageUrl?: string
+  imageSrc?: string
+  organizer?: string
 }
 
 export interface EventFormData {
@@ -55,6 +58,7 @@ export interface EventFormData {
   attendeeLimit?: number
   ticketPrice?: number
   acceptingRegistrations?: boolean
+  imageUrl?: string
 }
 
 export interface Activity {
@@ -114,30 +118,11 @@ export interface Attendee {
   purchaseDate: string
 }
 
-type EventScheduleItem = {
-  day: string
-  month: string
-  title: string
-  time: string
+export interface EventDetails extends Event {
+  schedule?: Activity[] // Usamos a interface Activity que você já criou
 }
 
-type EventData = {
-  id: number
-  title: string
-  category: string
-  imageHero: string
-  dateRange: string
-  fullDate: string
-  time: string
-  locationName: string
-  address: string
-  price: string
-  description: string[]
-  organizer: string
-  schedule: EventScheduleItem[]
-}
-
-type EventDetailsMock = {
-  [key: string]: EventData
-  default: EventData // Garantir que 'default' está sempre presente
+export type EventDetailsMock = {
+  [key: string]: EventDetails
+  default: EventDetails
 }

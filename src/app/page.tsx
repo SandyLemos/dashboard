@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from "react"
+import { useEvents } from "@/hooks/useEvents" // hook
 import Link from "next/link"
 import {
   Search,
@@ -73,101 +74,54 @@ const categories = [
   { icon: Baby, label: "Infantil e Família", color: "text-rose-500" },
 ]
 
-// Dados do Carrossel
-const featuredEvents = [
-  {
-    id: 1,
-    title: "Raphael Ghanem",
-    location: "Salvador - BA",
-    image: "/img/poster-raphael.jpg",
-    date: "15 a 23 Out",
-  },
-  {
-    id: 2,
-    title: "Show Extra",
-    location: "São Paulo - SP",
-    image: "/img/poster-raphael.jpg",
-    date: "25 Out",
-  },
-  {
-    id: 3,
-    title: "Final Tour",
-    location: "Rio de Janeiro - RJ",
-    image: "/img/poster-raphael.jpg",
-    date: "30 Out",
-  },
-  {
-    id: 4,
-    title: "Encerramento",
-    location: "Belo Horizonte - MG",
-    image: "/img/poster-raphael.jpg",
-    date: "05 Nov",
-  },
-  {
-    id: 5,
-    title: "Especial de Natal",
-    location: "Curitiba - PR",
-    image: "/img/poster-raphael.jpg",
-    date: "20 Dez",
-  },
-]
 
 export default function LandingPage() {
-  // Lógica do Carrossel
-  const [currentSlide, setCurrentSlide] = useState(0) // <-- useState usado
+  //  hook para pegar os eventos reais (do localStorage)
+  const { events: rawEvents } = useEvents()
+  const [currentSlide, setCurrentSlide] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
 
-  // Função central para rolar o carrossel para um índice específico
+  const events = [...rawEvents].sort((a, b) => {
+    const dateA = new Date(a.dates?.[0]?.startDate || "9999-12-31").getTime()
+    const dateB = new Date(b.dates?.[0]?.startDate || "9999-12-31").getTime()
+    return dateA - dateB
+  })
+
   const scrollCarouselTo = (index: number) => {
     if (carouselRef.current) {
-      const scrollAmount = 320 // Largura do card + gap (Ajuste se o CSS mudar)
-      const newScrollPosition = index * scrollAmount
-
+      const scrollAmount = 320
       carouselRef.current.scrollTo({
-        left: newScrollPosition,
+        left: index * scrollAmount,
         behavior: "smooth",
       })
-      setCurrentSlide(index) // Atualiza o estado
+      setCurrentSlide(index)
     }
   }
 
   const scrollCarousel = (direction: "left" | "right") => {
-    const totalSlides = featuredEvents.length
-    let nextSlide = currentSlide
-
-    if (direction === "right") {
-      nextSlide = (currentSlide + 1) % totalSlides
-    } else {
-      nextSlide = (currentSlide - 1 + totalSlides) % totalSlides
-    }
-
+    if (events.length === 0) return
+    const nextSlide =
+      direction === "right"
+        ? (currentSlide + 1) % events.length
+        : (currentSlide - 1 + events.length) % events.length
     scrollCarouselTo(nextSlide)
   }
 
   // useEffect para Automação do Carrossel
+  // CORREÇÃO DO INTERVALO (Automação)
   useEffect(() => {
-    const totalSlides = featuredEvents.length
-    const intervalTime = 4000 // 4 segundos
+    if (events.length === 0) return
 
     const interval = setInterval(() => {
-      // Calcula o próximo slide (fazendo loop)
       setCurrentSlide((prev) => {
-        const next = (prev + 1) % totalSlides
-
-        if (carouselRef.current) {
-          const scrollAmount = 320
-          carouselRef.current.scrollTo({
-            left: next * scrollAmount,
-            behavior: "smooth",
-          })
-        }
+        const next = (prev + 1) % events.length // CORRIGIDO: Usa events.length
+        scrollCarouselTo(next)
         return next
       })
-    }, intervalTime)
+    }, 4000)
 
-    // Limpa o intervalo quando o componente for desmontado
     return () => clearInterval(interval)
-  }, []) // Executa apenas na montagem
+  }, [events.length]) // Executa apenas na montagem
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
@@ -295,7 +249,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- SEÇÃO DESTAQUES (CARROSSEL) --- */}
+      {/* --- SEÇÃO DESTAQUES --- */}
       <section className="py-20 px-6 md:px-16 bg-gradient-to-b from-[#0d001a] to-[#1a0b2e]">
         <div className="flex items-center gap-4 mb-10">
           <Calendar className="text-[#d62f98] w-8 h-8" />
@@ -308,55 +262,69 @@ export default function LandingPage() {
         </div>
 
         <div className="relative group">
-          {/* Container do Scroll */}
           <div
             ref={carouselRef}
             className="flex gap-6 overflow-x-auto scrollbar-hide py-8 px-2 scroll-smooth"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {featuredEvents.map((event) => (
+            {events.map((event) => (
               <Link
                 key={event.id}
                 href={`/event-details/${event.id}`}
-                className="min-w-[300px] h-[450px] relative rounded-3xl overflow-hidden flex-shrink-0 shadow-xl transition-transform hover:scale-105 cursor-pointer"
+                className="min-w-[300px] h-[450px] relative rounded-3xl overflow-hidden flex-shrink-0 shadow-xl transition-transform hover:scale-105"
               >
                 <img
-                  src={event.image}
+                  src={event.imageUrl || "/img/poster-raphael.jpg"}
                   alt={event.title}
                   className="w-full h-full object-cover"
                 />
 
-                {/* Overlay Gradiente */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-6">
                   <div className="bg-white/90 text-black text-xs font-bold px-3 py-1 rounded-full w-fit mb-2 flex items-center gap-1">
-                    <Ticket className="w-3 h-3 text-[#d62f98]" /> Ingressos à
-                    venda
+                    <Ticket className="w-3 h-3 text-[#d62f98]" />
+                    {event.ticketPrice ? `R$ ${event.ticketPrice}` : "Gratuito"}
                   </div>
+
                   <h3 className="text-2xl font-bold mb-1">{event.title}</h3>
+
+                  {/* LOCALIZAÇÃO: Agora tipada corretamente usando sua interface Location */}
                   <div className="flex items-center gap-2 text-gray-300 text-sm">
-                    <MapPin className="w-4 h-4" /> {event.location}
+                    <MapPin className="w-4 h-4" />
+                    {event.location?.city && event.location?.state
+                      ? `${event.location.city} - ${event.location.state}`
+                      : "Local a definir"}
                   </div>
+
+                  {/* DATA: Acessando o array de EventDate[] com segurança */}
                   <div className="flex items-center gap-2 text-[#eebb58] text-sm mt-1 font-semibold">
-                    <Calendar className="w-4 h-4" /> {event.date}
+                    <Calendar className="w-4 h-4" />
+                    {event.dates && event.dates.length > 0
+                      ? new Date(event.dates[0].startDate).toLocaleDateString(
+                          "pt-BR",
+                        )
+                      : "Data a definir"}
                   </div>
                 </div>
               </Link>
             ))}
           </div>
 
-          {/* Botões de Controle do Carrossel */}
-          <button
-            onClick={() => scrollCarousel("left")}
-            className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full text-white hover:bg-[#d62f98] transition hidden md:block"
-          >
-            <ChevronLeft className="w-8 h-8" />
-          </button>
-          <button
-            onClick={() => scrollCarousel("right")}
-            className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full text-white hover:bg-[#d62f98] transition hidden md:block"
-          >
-            <ChevronRight className="w-8 h-8" />
-          </button>
+          {events.length > 0 && (
+            <>
+              <button
+                onClick={() => scrollCarousel("left")}
+                className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full text-white hover:bg-[#d62f98] transition hidden md:block"
+              >
+                <ChevronLeft className="w-8 h-8" />
+              </button>
+              <button
+                onClick={() => scrollCarousel("right")}
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full text-white hover:bg-[#d62f98] transition hidden md:block"
+              >
+                <ChevronRight className="w-8 h-8" />
+              </button>
+            </>
+          )}
         </div>
       </section>
 

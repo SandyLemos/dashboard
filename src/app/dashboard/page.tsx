@@ -1,6 +1,7 @@
 "use client"
 import "./styles/globals.css"
 
+import { v4 as uuidv4 } from "uuid"
 import { useState, useEffect } from "react"
 import {
   Plus,
@@ -46,15 +47,34 @@ import {
 import { mockEvents, mockAttendees, mockActivities } from "./data/mockData"
 
 export default function App() {
-  const [events, setEvents] = useState<Event[]>(mockEvents)
-  const [attendees, setAttendees] = useState<Attendee[]>(mockAttendees)
-  const [activities, setActivities] = useState<Activity[]>(mockActivities)
+ const [events, setEvents] = useState<Event[]>(() => {
+   if (typeof window !== "undefined") {
+     const saved = localStorage.getItem("@evem:events")
+     return saved ? JSON.parse(saved) : mockEvents
+   }
+   return mockEvents
+ })
+ const [attendees, setAttendees] = useState<Attendee[]>(() => {
+   if (typeof window !== "undefined") {
+     const saved = localStorage.getItem("@evem:attendees")
+     return saved ? JSON.parse(saved) : mockAttendees
+   }
+   return mockAttendees
+ })
+ const [activities, setActivities] = useState<Activity[]>(() => {
+   if (typeof window !== "undefined") {
+     const saved = localStorage.getItem("@evem:activities")
+     return saved ? JSON.parse(saved) : mockActivities
+   }
+   return mockActivities
+ })
+  const [isMounted, setIsMounted] = useState(false)
   const [activeTab, setActiveTab] = useState<string>("dashboard")
   const [showEventForm, setShowEventForm] = useState(false)
   const [editingEvent, setEditingEvent] = useState<Event | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [attendeesViewEvent, setAttendeesViewEvent] = useState<Event | null>(
-    null
+    null,
   )
   const [sortBy, setSortBy] = useState<"date" | "title" | "created">("date")
   const [layoutMode, setLayoutMode] = useState<"grid" | "list">("grid")
@@ -66,36 +86,63 @@ export default function App() {
     dateRange: "all",
   })
 
-  // 🎯 Lógica de Atualização Automática de Status (Usa useEffect e updateEventStatuses)
+  // 1. Salvar sempre que houver mudanças nos dados
   useEffect(() => {
-    // Função para atualizar os status dos eventos
-    const updateStatuses = () => {
+    localStorage.setItem("@evem:events", JSON.stringify(events))
+    localStorage.setItem("@evem:attendees", JSON.stringify(attendees))
+    localStorage.setItem("@evem:activities", JSON.stringify(activities))
+  }, [events, attendees, activities])
+
+  // 2. Atualização Automática de Status (Usa o updateEventStatuses importado)
+  useEffect(() => {
+    const checkStatuses = () => {
       setEvents((prevEvents) => {
-        // Usa updateEventStatuses para verificar e atualizar se o evento já passou
-        const updatedEvents = updateEventStatuses(prevEvents)
-        return updatedEvents
+        const updated = updateEventStatuses(prevEvents)
+        // Só atualiza o estado se algo realmente mudou para evitar re-renders infinitos
+        return JSON.stringify(updated) === JSON.stringify(prevEvents)
+          ? prevEvents
+          : updated
       })
     }
 
-    // Executa imediatamente ao montar
-    updateStatuses()
-
-    // Configura a execução a cada 1 minuto (60000 ms) para manter os status atualizados
-    const intervalId = setInterval(updateStatuses, 60000)
-
-    // Função de limpeza: interrompe o intervalo quando o componente é desmontado
+    checkStatuses()
+    const intervalId = setInterval(checkStatuses, 60000)
     return () => clearInterval(intervalId)
-  }, []) // Array de dependências vazio: executa apenas na montagem
+  }, [])
+
+  useEffect(() => {
+    setIsMounted(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const filteredAndSortedEvents = sortEvents(
     filterEvents(events, filters),
-    sortBy
+    sortBy,
   )
 
   const handleCreateEvent = (eventData: EventFormData) => {
-    const newEvent = createEventFromFormData(eventData)
-    setEvents((prev) => [...prev, newEvent])
+    const newEvent: Event = {
+      ...eventData, // Aqui já vem title, description, category, dates e o objeto location completo
+      id: uuidv4(),
+
+      // CAMPOS OBRIGATÓRIOS QUE NÃO ESTÃO NO FORM (Valores padrão)
+      registeredAttendees: 0,
+      status: "active",
+      acceptingRegistrations: eventData.acceptingRegistrations ?? true,
+      ticketsSold: 0,
+
+      // METADADOS
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+
+    // Atualiza o estado
+    setEvents((prev) => [newEvent, ...prev])
+
+    // Fecha o modal e limpa estados de edição
     setShowEventForm(false)
+    setEditingEvent(null)
+
     toast.success("Evento criado com sucesso!")
   }
 
@@ -104,7 +151,9 @@ export default function App() {
 
     const updatedEvent = updateEventWithFormData(editingEvent, eventData)
     setEvents((prev) =>
-      prev.map((event) => (event.id === updatedEvent.id ? updatedEvent : event))
+      prev.map((event) =>
+        event.id === updatedEvent.id ? updatedEvent : event,
+      ),
     )
     setEditingEvent(null)
     setShowEventForm(false)
@@ -118,7 +167,7 @@ export default function App() {
     // Deleta os participantes relacionados ao evento.
     // Isso utiliza 'setAttendees'
     setAttendees((prev) =>
-      prev.filter((attendee) => attendee.eventId !== eventId)
+      prev.filter((attendee) => attendee.eventId !== eventId),
     )
 
     if (selectedEvent?.id === eventId) {
@@ -178,7 +227,7 @@ export default function App() {
 
   const handleUpdateActivity = (
     activityId: string,
-    activityData: ActivityFormData
+    activityData: ActivityFormData,
   ) => {
     setActivities((prev) =>
       prev.map((activity) =>
@@ -188,15 +237,15 @@ export default function App() {
               ...activityData,
               updatedAt: new Date().toISOString(),
             }
-          : activity
-      )
+          : activity,
+      ),
     )
     toast.success("Atividade atualizada com sucesso!")
   }
 
   const handleDeleteActivity = (activityId: string) => {
     setActivities((prev) =>
-      prev.filter((activity) => activity.id !== activityId)
+      prev.filter((activity) => activity.id !== activityId),
     )
     toast.success("Atividade excluída com sucesso!")
   }
@@ -212,6 +261,10 @@ export default function App() {
   const eventAttendeesMap = attendeesViewEvent
     ? attendees.filter((a) => a.eventId === attendeesViewEvent.id)
     : []
+  
+  if (!isMounted) {
+    return null // Ou um <div className="min-h-screen bg-background" /> para não ficar totalmente branco
+  }
 
   return (
     <div className="min-h-screen bg-background">

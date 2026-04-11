@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { v4 as uuidv4 } from "uuid"
 import { Event, EventFormData, EventDate, Location } from "../types/event"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
@@ -27,27 +28,33 @@ interface EventFormProps {
 
 export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
   const [formData, setFormData] = useState<EventFormData>({
-    title: event?.title || "",
-    description: event?.description || "",
-    dates: event?.dates || [
-      {
-        id: crypto.randomUUID(),
-        date: "",
-        startTime: "",
-        endTime: "",
-      },
-    ],
-    location: event?.location || {
-      name: "",
-      street: "",
-      neighborhood: "",
-      city: "",
-      state: "",
-      zipCode: "",
+    title: event?.title ?? "",
+    description: event?.description ?? "",
+    imageUrl: event?.imageUrl ?? "",
+
+    dates:
+      event?.dates && event.dates.length > 0
+        ? event.dates
+        : [
+            {
+              id: uuidv4(),
+              startDate: "",
+              endDate: "",
+              startTime: "",
+              endTime: "",
+            },
+          ],
+    location: {
+      name: event?.location?.name ?? "",
+      street: event?.location?.street ?? "",
+      neighborhood: event?.location?.neighborhood ?? "",
+      city: event?.location?.city ?? "",
+      state: event?.location?.state ?? "",
+      zipCode: event?.location?.zipCode ?? "",
     },
-    category: event?.category as CategoryKey|| "other",
-    attendeeLimit: event?.attendeeLimit || undefined,
-    ticketPrice: event?.ticketPrice || undefined,
+    category: (event?.category as CategoryKey) ?? "other",
+    attendeeLimit: event?.attendeeLimit, // undefined aqui é aceitável se o campo for opcional no type
+    ticketPrice: event?.ticketPrice,
     acceptingRegistrations: event?.acceptingRegistrations ?? true,
   })
 
@@ -68,7 +75,8 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
       newErrors.dates = "Adicione pelo menos uma data"
     } else {
       formData.dates.forEach((dateItem, index) => {
-        if (!dateItem.date) newErrors[`date-${index}`] = "Data é obrigatória"
+       if (!dateItem.startDate)
+         newErrors[`date-${index}`] = "Data é obrigatória"
         if (!dateItem.startTime)
           newErrors[`startTime-${index}`] = "Horário de início é obrigatório"
         if (!dateItem.endTime)
@@ -101,8 +109,27 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     if (validateForm()) {
-      onSubmit(formData)
+      // 1. Criamos um objeto com os dados básicos
+      // 2. Adicionamos campos que a sua lista/carrossel precisam para renderizar
+      const finalEventData: EventFormData = {
+        ...formData,
+        // Se você não tem campo de imagem no form, precisamos de um placeholder
+        // Caso contrário, o carrossel na landing page não terá o que mostrar.
+        imageUrl:
+          formData.imageUrl ||
+          "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=1000",
+      }
+
+      console.log("Enviando dados do formulário:", finalEventData)
+
+      // Chama a função onSubmit que vem via props
+      onSubmit(finalEventData)
+    } else {
+      // Scroll para o primeiro erro para dar feedback visual
+      const firstError = document.querySelector(".text-destructive")
+      firstError?.scrollIntoView({ behavior: "smooth", block: "center" })
     }
   }
 
@@ -117,8 +144,9 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
   // 'addDate' é usado
   const addDate = () => {
     const newDate: EventDate = {
-      id: crypto.randomUUID(),
-      date: "",
+      id: uuidv4(),
+      startDate: "", 
+      endDate: "", 
       startTime: "",
       endTime: "",
     }
@@ -212,6 +240,45 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
             )}
           </div>
 
+          {/* 🖼️ IMAGE URL & PREVIEW */}
+          <div className="space-y-4 border p-4 rounded-md bg-muted/30">
+            <div className="space-y-2">
+              <Label htmlFor="imageUrl">URL da Imagem de Capa</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="imageUrl"
+                  type="url"
+                  value={formData.imageUrl || ""}
+                  onChange={(e) => updateField("imageUrl", e.target.value)}
+                  placeholder="https://exemplo.com/imagem.jpg"
+                />
+              </div>
+              <p className="text-[10px] text-muted-foreground">
+                Dica: Use links do Unsplash ou Pexels para melhores resultados.
+              </p>
+            </div>
+
+            {/* Preview em tempo real com Glassmorphism que você curte */}
+            {formData.imageUrl && (
+              <div className="relative w-full h-40 rounded-lg overflow-hidden border shadow-inner bg-black/5">
+                <img
+                  src={formData.imageUrl}
+                  alt="Preview do evento"
+                  className="w-full h-full object-cover"
+                  onError={(e) =>
+                    (e.currentTarget.src =
+                      "https://placehold.co/600x400?text=Erro+na+Imagem")
+                  }
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-[2px]">
+                  <span className="text-white text-xs font-medium bg-black/50 px-2 py-1 rounded">
+                    Visualização do Card
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* CATEGORY + LIMIT */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* CATEGORY */}
@@ -224,7 +291,9 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={translateCategory(formData.category)}/>
+                  <SelectValue
+                    placeholder={translateCategory(formData.category)}
+                  />
                   <SelectValue placeholder="Selecione a categoria" />
                 </SelectTrigger>
                 <SelectContent>
@@ -236,10 +305,18 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
                   <SelectItem value="musicalShows">Shows e Festas</SelectItem>
                   <SelectItem value="courses">Cursos/Workshops</SelectItem>
                   <SelectItem value="teather">Teatro e Cultura</SelectItem>
-                  <SelectItem value="technology">Tecnologia e Inovação</SelectItem>
-                  <SelectItem value="gastronomy">Gastronomia e Bebidas</SelectItem>
-                  <SelectItem value="religious">Religião e Espiritualidade</SelectItem>
-                  <SelectItem value="kidsAndFamily">Infantil e Família</SelectItem>
+                  <SelectItem value="technology">
+                    Tecnologia e Inovação
+                  </SelectItem>
+                  <SelectItem value="gastronomy">
+                    Gastronomia e Bebidas
+                  </SelectItem>
+                  <SelectItem value="religious">
+                    Religião e Espiritualidade
+                  </SelectItem>
+                  <SelectItem value="kidsAndFamily">
+                    Infantil e Família
+                  </SelectItem>
                   <SelectItem value="other">Outro</SelectItem>
                 </SelectContent>
               </Select>
@@ -255,7 +332,7 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
                 onChange={(e) =>
                   updateField(
                     "attendeeLimit",
-                    e.target.value ? Number(e.target.value) : undefined
+                    e.target.value ? Number(e.target.value) : undefined,
                   )
                 }
                 placeholder="Sem limite"
@@ -271,33 +348,34 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
             <h3 className="text-lg font-semibold flex items-center gap-2">
               <Calendar className="h-5 w-5" /> Datas e Horários
             </h3>
+
             {formData.dates.map((dateItem, index) => (
               <div
                 key={dateItem.id}
-                className="grid grid-cols-1 md:grid-cols-7 gap-3 items-end border p-4 rounded-md relative"
+                className="grid grid-cols-1 md:grid-cols-7 gap-3 items-end border p-4 rounded-md relative bg-muted/10"
               >
-                {/* DATE */}
+                {/* START DATE (3 Colunas) */}
                 <div className="col-span-1 md:col-span-3 space-y-2">
-                  <Label htmlFor={`date-${dateItem.id}`}>Data</Label>
+                  <Label htmlFor={`startDate-${dateItem.id}`}>Data</Label>
                   <Input
-                    id={`date-${dateItem.id}`}
+                    id={`startDate-${dateItem.id}`}
                     type="date"
-                    value={dateItem.date}
+                    value={dateItem.startDate}
                     onChange={(e) =>
-                      updateDate(dateItem.id, "date", e.target.value)
+                      updateDate(dateItem.id, "startDate", e.target.value)
                     }
                     className={
-                      errors[`date-${index}`] ? "border-destructive" : ""
+                      errors[`startDate-${index}`] ? "border-destructive" : ""
                     }
                   />
-                  {errors[`date-${index}`] && (
-                    <p className="text-sm text-destructive absolute top-full mt-1">
-                      {errors[`date-${index}`]}
+                  {errors[`startDate-${index}`] && (
+                    <p className="text-[10px] text-destructive font-medium">
+                      {errors[`startDate-${index}`]}
                     </p>
                   )}
                 </div>
 
-                {/* START TIME */}
+                {/* START TIME (2 Colunas) */}
                 <div className="col-span-1 md:col-span-2 space-y-2">
                   <Label htmlFor={`startTime-${dateItem.id}`}>Início</Label>
                   <Input
@@ -312,13 +390,13 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
                     }
                   />
                   {errors[`startTime-${index}`] && (
-                    <p className="text-sm text-destructive absolute top-full mt-1">
+                    <p className="text-[10px] text-destructive font-medium">
                       {errors[`startTime-${index}`]}
                     </p>
                   )}
                 </div>
 
-                {/* END TIME */}
+                {/* END TIME (2 Colunas) */}
                 <div className="col-span-1 md:col-span-2 space-y-2">
                   <Label htmlFor={`endTime-${dateItem.id}`}>Término</Label>
                   <Input
@@ -333,7 +411,7 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
                     }
                   />
                   {errors[`endTime-${index}`] && (
-                    <p className="text-sm text-destructive absolute top-full mt-1">
+                    <p className="text-[10px] text-destructive font-medium">
                       {errors[`endTime-${index}`]}
                     </p>
                   )}
@@ -345,26 +423,28 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
                     type="button"
                     variant="ghost"
                     size="icon"
-                    onClick={() => removeDate(dateItem.id)} // 'removeDate' é usado
-                    className="absolute top-2 right-2 text-destructive hover:bg-destructive/10"
+                    onClick={() => removeDate(dateItem.id!)}
+                    className="absolute -top-2 -right-2 h-8 w-8 rounded-full bg-background border shadow-sm text-destructive hover:bg-destructive/10"
                   >
-                    <Trash2 className="h-4 w-4" /> {/* 'Trash2' é usado */}
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 )}
               </div>
             ))}
 
             {errors.dates && (
-              <p className="text-sm text-destructive mt-2">{errors.dates}</p>
+              <p className="text-sm text-destructive font-medium">
+                {errors.dates}
+              </p>
             )}
 
             <Button
               type="button"
               variant="outline"
-              onClick={addDate} // 'addDate' é usado
-              className="w-full"
+              onClick={addDate}
+              className="w-full border-dashed"
             >
-              <Plus className="h-4 w-4 mr-2" /> {/* 'Plus' é usado */}
+              <Plus className="h-4 w-4 mr-2" />
               Adicionar outra data
             </Button>
           </section>
@@ -482,7 +562,7 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
                 onChange={(e) =>
                   updateField(
                     "ticketPrice",
-                    e.target.value ? Number(e.target.value) : undefined
+                    e.target.value ? Number(e.target.value) : undefined,
                   )
                 }
                 placeholder="0.00 (Deixe vazio para evento gratuito)"

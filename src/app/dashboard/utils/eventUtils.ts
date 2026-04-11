@@ -1,16 +1,13 @@
-import { Event, EventFormData } from "../types/event"
+import { Event, EventDate, EventFormData } from "../types/event"
+import { v4 as uuidv4 } from 'uuid';
 import { EventFilters } from "../components/EventFilters"
 
 // Generate unique ID
-export const generateId = (): string => {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2)
-}
-
 // Create event from form data
 export const createEventFromFormData = (formData: EventFormData): Event => {
   const now = new Date().toISOString()
   return {
-    id: generateId(),
+    id: uuidv4(),
     title: formData.title,
     description: formData.description,
     dates: formData.dates,
@@ -50,14 +47,14 @@ export const updateEventWithFormData = (
 // Get next date from event dates array
 export const getNextEventDate = (
   event: Event
-): { date: string; startTime: string; endTime: string } | null => {
+): EventDate | null => {
   const now = new Date()
   const sortedDates = [...event.dates].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
   )
 
   for (const eventDate of sortedDates) {
-    const eventStart = new Date(`${eventDate.date}T${eventDate.startTime}`)
+    const eventStart = new Date(`${eventDate.startDate}T${eventDate.startTime}`)
     if (eventStart >= now) {
       return eventDate
     }
@@ -103,7 +100,7 @@ export const filterEvents = (
       const nextDate = getNextEventDate(event)
       if (!nextDate) return false
 
-      const eventDate = new Date(nextDate.date)
+      const eventDate = new Date(nextDate.startDate)
       const today = new Date()
       today.setHours(0, 0, 0, 0)
 
@@ -166,8 +163,8 @@ export const sortEvents = (
         if (!nextDateA) return 1
         if (!nextDateB) return -1
 
-        const dateA = new Date(`${nextDateA.date}T${nextDateA.startTime}`)
-        const dateB = new Date(`${nextDateB.date}T${nextDateB.startTime}`)
+        const dateA = new Date(`${nextDateA.startDate}T${nextDateA.startTime}`)
+        const dateB = new Date(`${nextDateB.startDate}T${nextDateB.startTime}`)
         return dateA.getTime() - dateB.getTime()
       }
     }
