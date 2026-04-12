@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { Navbar } from "../evem-projeto/components/Navbar"
 import { Ticket, MapPin, Calendar, Heart } from "lucide-react"

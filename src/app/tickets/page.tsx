@@ -106,7 +106,7 @@ const categories = [
 export default function TicketsPage() {
   const [activeTab, setActiveTab] = useState("Ativos")
 
-  const tabs = ["Ativos", "Pendentes", "Cancelados", "Encerrados"]
+  const tabs = ["Ativos", "Pendentes", "Cancelados", "Esgotados"]
 
   return (
     <div className="min-h-screen bg-[#dae4f8] pb-10 flex flex-col items-center">

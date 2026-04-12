@@ -38,7 +38,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs"
 import { Toaster, toast } from "sonner"
 import {
-  createEventFromFormData,
   updateEventWithFormData,
   filterEvents,
   sortEvents,

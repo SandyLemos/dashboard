@@ -180,9 +180,14 @@ export default function EventsPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-5 text-white">
                   <div className="bg-white/90 text-black text-xs font-bold px-3 py-1 rounded-full w-fit mb-2 flex items-center gap-1">
                     <Ticket className="w-3 h-3 text-[#d62f98]" />
-                    {event.tickets === "Esgotado"
-                      ? "Esgotado"
-                      : `${event.tickets || 0} rest.`}
+                    {/* Lógica unificada: Cálculo dinâmico ou texto de esgotado */}
+                    {event.attendeeLimit && event.ticketsSold !== undefined
+                      ? event.attendeeLimit - event.ticketsSold <= 0
+                        ? "Esgotado"
+                        : `${(event.attendeeLimit - event.ticketsSold).toLocaleString("pt-BR")} rest.`
+                      : event.tickets === "Esgotado"
+                        ? "Esgotado"
+                        : `${(Number(event.tickets) || 0).toLocaleString("pt-BR")} rest.`}
                   </div>
                   <h3 className="text-xl font-bold mb-1">{event.title}</h3>
                   <div className="flex items-center gap-2 text-gray-300 text-xs">
